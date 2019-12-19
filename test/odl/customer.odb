@@ -1,0 +1,47 @@
+with ODB.Persistent;				use ODB.Persistent;
+with Ada.Text_IO;				use Ada.Text_IO;
+
+package body Customer  is 
+
+   type Handle is access all Customer.Object;
+
+   ------------
+   -- Create --
+   ------------
+   function Create( 
+      Name   : in String;
+      Street : in String;
+      Id     : in Natural ) return Reference is
+      Result : Reference := Lookup_Object( Name );
+      H      : Handle    := null;
+   begin
+
+      if Result = null then
+         Result := new Object;
+	 Name_Object( Result, Name );
+         H := Handle(Result);
+         H.CustomerId := Id;
+
+	 Person.Zip( Result, 999 );
+	 Person.Name( Result, Name );
+      else
+         Put_Line( "An old object" );
+      end if;
+
+      return Result;
+   end Create;
+
+   -------------
+   -- Display --
+   -------------
+   procedure Display(
+      This : in Reference ) is 
+      H    : Handle := Handle(This);
+   begin
+      Person.Display( This );
+      Put_Line("Customer Id:" &  Natural'Image(H.CustomerID) );
+   end Display;
+
+begin
+   Register_Object;   
+end Customer;

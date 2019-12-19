@@ -1,0 +1,80 @@
+## ----------------------------------------------------------------------------
+##                                                                           --
+##  Filename        : $Source: /cvsroot/gnade/odb/etc/config.site,v $	     --
+##  Description     : site specific configuration file			     --
+##  Author          : Michael Erdmann <Michael.Erdmann@snafu.de> 	     --
+##  Created On      : 14-Apr-2002					     --
+##  Last Modified By: $Author: merdmann $				     --
+##  Last Modified On: $Date: 2003/06/23 07:36:39 $		             --
+##  Status          : $State: Exp $					     --
+##                                                                           --
+##  Copyright (C) 2000-2003 M.Erdmannn                                       --
+##									     --
+##  GNADE is copyrighted by the persons and institutions enumerated in the   --
+##  AUTHORS file. This file is located in the root directory of the          --
+##  GNADE distribution.                                                      --
+##                                                                           --
+##  GNADE is free software;  you can redistribute it  and/or modify it under --
+##  terms of the  GNU General Public License as published  by the Free Soft- --
+##  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+##  sion.  GNAT is distributed in the hope that it will be useful, but WITH- --
+##  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+##  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+##  for  more details.  You should have  received  a copy of the GNU General --
+##  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+##  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+##  MA 02111-1307, USA.                                                      --
+##                                                                           --
+##  As a special exception,  if other files  instantiate  generics from      --
+##  GNADE Ada units, or you link GNADE Ada units or libraries with other     --
+##  files  to produce an executable, these  units or libraries do not by     --
+##  itself cause the resulting  executable  to  be covered  by the  GNU      --
+##  General  Public  License.  This exception does not however invalidate    --
+##  any other reasons why  the executable file  might be covered by the      --
+##  GNU Public License.                                                      --
+##                                                                           --
+## ----------------------------------------------------------------------------
+##
+##
+## If your system deviates from the predefined values change it here.
+##
+
+##
+## VARIABLE: site_tooldir
+##     NOTE: This is the root directory for all components belonging
+##           to this package.
+##  Default: /usr/local/ABE   
+#site_tooldir=
+
+##
+## VARIABLE: site_pkgconfig_path
+##     NOTE: This variable specifies where the gnu pksgconfig directory is 
+##	     is located.
+##
+## Default:
+##    site_pkgconfig_path=/usr/local/lib/pkgconfig
+##
+##site_pkgconfig_path=
+
+##
+##
+## VARIABLE: site_gnat_path
+##     NOTE: This variable specifies where the GNAT ada complier frontend is 
+##	     located.
+##
+## Default:
+##    site_gnat_path=/usr/gnat/bin
+##
+##site_gnat_path=
+
+##
+##
+## VARIABLE: site_ada_path
+##     NOTE: This variable specifies the locations where you store add on packages
+##           as for example the charles package.
+##
+## Default:
+##    site_gnat_path=/usr/gnat/bin
+##
+##site_gnat_path=
+

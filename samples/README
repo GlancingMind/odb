@@ -1,0 +1,5 @@
+This directory is to top level directory of all samples are located.
+The individual samples are expected to be located in subdirectories
+indicated in the Makefile.local file with the variable samples (e.g
+samples=test1 test2.
+

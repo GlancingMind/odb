@@ -1,0 +1,378 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB.Entity"
+HREF="c458.htm"><LINK
+REL="PREVIOUS"
+TITLE="ODB.Entity"
+HREF="c458.htm"><LINK
+REL="NEXT"
+TITLE="ODB.Memory_Stream"
+HREF="c530.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c458.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. ODB.Entity</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c530.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN469"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN471"
+></A
+>function Create</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Create(   
+      Name : in String ) return Reference; </PRE
+><P
+> this type represents the persistent collection. </P
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>   Unknown_Attribute : exception; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN477"
+></A
+>Description</H4
+><P
+>    Create an entity of the given name. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN480"
+></A
+>Preconditions</H4
+><P
+>    None. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN483"
+></A
+>Postconditions</H4
+><P
+>    P.1 - The function returns a reference to the named entity. If the </P
+><P
+>          named entity already exisits, the reference will be returned. 
+          Otherwise a new instance will be created. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN487"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN489"
+></A
+>function Name</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Name(  
+      This : in Reference ) return String ; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN492"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN494"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN496"
+></A
+>function Attributes</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Attributes(  
+      This : in Reference ) return Attribute_Array_Access ; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN499"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN501"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN503"
+></A
+>procedure Destroy</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Destroy(  
+      This : in out Reference ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN506"
+></A
+>Description</H4
+><P
+>    Desctroy the entity </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN509"
+></A
+>Preconditions</H4
+><P
+>    P.1 - The reference point to a collection. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN511"
+></A
+>Postconditions</H4
+><P
+>    C.1 - All resources are released </P
+><P
+>    C.2 - The reference to the entity is set to null </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN514"
+></A
+>Exceptions</H4
+><P
+>    Invalid_Object - P.1 violated </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN516"
+></A
+>function Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Attribute(  
+      This   : in Reference; 
+      Name   : in String ) return Reference; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN519"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN521"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN523"
+></A
+>procedure Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Attribute(  
+      This   : in Reference; 
+      Name   : in String; 
+      Value  : in Reference ); 
+ 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN526"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN528"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c458.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c530.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Entity</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c458.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.Memory_Stream</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

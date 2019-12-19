@@ -1,0 +1,972 @@
+<!doctype book public "-//OASIS//DTD DocBook V4.2//EN" [
+<!entity gfdl    SYSTEM "gfdl.sgml">
+<!entity gpl     SYSTEM "gpl.sgml">
+<!entity faq     SYSTEM "faq.sgml">
+<!entity api	 SYSTEM "api.sgml">
+]>
+
+<book id="odb"><?dbhtml filename="index.html">
+
+<bookinfo>
+<title>User's Guide</title>
+<subtitle>A Framework for Object Persistency for GNAT</subtitle>
+<subtitle>Version 0.6.1</subtitle>
+<subtitle>Document Revision $Revision: 1.16 $</subtitle>
+<date>$Date: 2003/10/12 14:05:05 $</date>
+<authorgroup>
+<author>
+<firstname>Michael</firstname>
+<surname>Erdmann</surname>
+</author>
+</authorgroup>
+
+<releaseinfo>Version 0.4</releaseinfo>
+
+<editor>
+<firstname>Michael</firstname>
+<surname>Erdmann</surname>
+</editor>
+
+<publisher>
+<publishername>Michael Erdmann</publishername>
+<address><city>Berlin</city></address>
+</publisher>
+
+<printhistory>
+<para>June 2003: Initial Revision</para>
+</printhistory>
+
+<revhistory>
+  <revision>
+     <revnumber>$Revision: 1.16 $</revnumber>
+     <date>$Date: 2003/10/12 14:05:05 $</date>
+     <authorinitials>$Author: merdmann $</authorinitials>
+  </revision>
+</revhistory>
+
+<copyright>
+<year>2003</year>
+<holder>M. Erdmann</holder>
+</copyright>
+<legalnotice>
+   <blockquote><para>
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.1
+      or any later version published by the Free Software Foundation;
+      with no Invariant Sections, with the Front-Cover Texts being 
+      "A Object Persistency for Ada 95".
+      A copy of the license is included in the section entitled "GNU
+      Free Documentation License".
+   </para></blockquote>
+</legalnotice>
+
+</bookinfo>
+
+<preface id="PREFACE"><?dbhtml filename="perface.html">
+   <title>Preface</title>
+   <para>This package is part of the GNADE project hosted 
+   at http://gnade.sourceforge.net. The build environment is based upon the 
+   ABE project hosted at  http://ascl.sourceforge.net.</para>
+
+   <para>The objective of this project is to provide a basic approach to object 
+   persistency for Ada 95. The project will be done in two phases:
+   <itemizedlist mark=opencircle>
+      <listitem><para>Phase 1 - Objects are stored in the filesystem</para></listitem>
+      <listitem><para>Phase 2 - Objects are stored in an RDBMS</para></listitem>
+   </itemizedlist>
+   This document represents Phase 1. In this phase some basic features of 
+   an object database as e.g. collections will be available. 
+   </para>
+
+   <para>The coordination of the development work is done by: 
+      <address>
+      Michael Erdmann
+      <email>Michael.Erdmann@snafu.de</email>
+      </address>
+   </para>
+
+   <para>The GNU Public License (GPL) applies with the following extension to 
+   all software components of this project.</para>
+
+   <para>As a special exception, if other files instantiate generics from GNADE 
+   Ada units, or you link ODB Ada units or libraries with other files to 
+   produce an executable, these units or libraries do not by itself cause 
+   the resulting executable to be 
+   covered by the GNU General Public License. This exception does not however 
+   invalidate any other reasons why the executable file might be covered by 
+   the GNU Public License.</para>
+</preface>
+
+<part id="part1"><?dbhtml filename="part1.html">
+   <title>Introduction</title>
+<chapter id="overview"><?dbhtml filename="overview.html">
+   <title>Overview</title>
+
+   <para>Object persistency means that your application may create a
+   a data object which survives auto magically the shutdown of your 
+   application. The next time you start your data object is available 
+   again for use. Normally this is achieved by the explicit use of 
+   files or data bases, where the data is stored. In such cases effort
+   has to be spend to read/write object from the files system or to
+   locate the objects in the databases and to construct the objects 
+   from the data.</para>
+   <para>Lets assume the following code fragment:
+      <programlisting>
+      declare
+         V : Persistent_Type ;
+      begin
+         ..... code invoking the variable V
+      end ;
+      </programlisting>
+   Persistence in this context mean, that the state of the object V is available
+   again, when next time the block is entered. In order to implement persistency
+   in this context is it sufficient simply to the V a globally defined variable.
+   </para>
+   <para>The persistency concept provided by ODB works in a very similar way. All
+   persistent objects are derived from a basic data types. Objects of this type
+   are stored in a special storage pool which is saved at application termination
+   and loaded when the application using the objects is starting up. A typical
+   code fragment looks like this:
+      <programlisting>
+      declare
+         V : Reference := Person.Create( "Michael Erdmann" ) ;
+      begin
+         ..... code invoking the variable V
+      end ;
+      </programlisting>
+   The function Person.Create creates an new instance with the name Michael Erdmann
+   if the instance is not  yet stored in the in the persistent storage pool. If the 
+   object is already existing, the procedure returns the reference to the already
+   existing object. This show one of the key concepts of ODB, in order to make an
+   Object persistent it has to be named, because otherwise it would not be 
+   possible to retrieve the object.
+   </para>
+   <para>
+   In order to make the concept of persistency easy to handle, oDB provides
+   a preprocessor which adds automatically all code to support persistency 
+   of a type to an Ada95 package. A typical construct may look like this:
+     <programlisting>
+     package Person is 
+        ..............
+        type Object is persistent record
+               Id   : attribute Natural := 0;
+               Name : attribute Unbounded_String; 
+               Tmp  : Natural;
+            end record;
+
+	function Create(
+           Name   : in String ) return Reference is
+           Result : Reference := Lookup_Object( Name );
+           H      : Handle := Handle( Result );
+        begin
+           if Result = null then
+               Put_Line("New instance of person created" );
+               Result := new Object;
+               Name_Object( Result, Name );
+
+               H := Handle( Result );
+
+               H.Name := To_Unbounded_String(Name);
+               H.Id   := 1;
+            end if;
+            return Result;
+         end Create;
+
+        ...............
+     end Person;
+     </programlisting> 
+   This construct defines in the package Person a persistent object Object with 
+   the attributes Id and Name. Attributes are fields which are stored. All other 
+   fields will not be restored when the object is restored.</para>
+   <para>The procedure Create first checks if an object with the given name is
+   already knwon. If not, a new instance will be created, otherwise the already
+   exisisting instance will be used.</para>
+
+   <para>The development cycle which leads to an application using persistency
+   is shown in the diagram below:</para>
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="development.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="development.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Development Cycles</phrase>
+      </textobject>
+      <caption>
+         <para>Steps involved in building ODB applications</para>
+      </caption>
+      </mediaobject>
+   <para>In the first step, the developer implements a persistent class by 
+   creating a package which contains a single persistent data type type 
+   defining the so called data model using a simple extension of the Ada 95
+   language. The example below shows such a code fragement:</para>
+
+   <programlisting>
+
+   type Object is persistent record
+          A,X,Y   : attribute Integer ;                 -- this goes into the DB
+          B       : attribute String(1..50) ;           -- this also
+          C       : Integer := 2222;                    -- this not
+       end record ;
+   </programlisting>
+   <para>This code will be translated by the ODL preprocessor into Ada 95 code
+   which contains the Serialize/Deserialize and Factory code.</para>
+   <para>After the ODL translation, the code is compiled using an Ada 95 
+   compiler and is ready for use.</para>
+
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="deployment.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="deployment.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Development Cycles</phrase>
+      </textobject>
+      <caption>
+         <para>Deployment of the ODB components</para>
+      </caption>
+      </mediaobject>
+
+</chapter>
+
+<chapter id="getstarted"><?dbhtml filename="getstarted.html">
+<title>Getting started</title>
+<para>
+The ODB environment is distributed as source package, which 
+means in order to use is, the software has to be build (compiled
+and linked) on your system before it can be used.
+</para>
+
+<sect1>
+   <title>Installation on Unix like systems</title>
+   <para>
+   After you  obtained the source code from the net you 
+   need to install and compile it. This chapter describes
+   this first steps of installing the environment onto 
+   your system.
+   </para>
+
+   <sect2>
+   <title>Unpacking the distribution</title>
+   <para>
+   The source code is normally distributed as compressed tar 
+   file. To unpack the distribution execute the command:
+   <programlisting>
+      gunzip -c tarfilename.gz | tar xvf -
+   </programlisting> 
+   This will unpack the directory tree of the development 
+   environment. 
+   </para>				    
+   </sect2>
+
+   <sect2>
+   <title>Configuring the ODB installation</title>
+   <para>
+   After unpacking the distribution change into the top level directory 
+   of the ODB release. Before you run the configure script examine the 
+   contents of the file etc/config.site. 
+   </para>
+   <para>
+   After checking the settings, the environment has to be configured
+   by means of the command:
+   <programlisting>
+
+       cd odb-src-....
+       ./configure [ option(s) ]
+
+   </programlisting>
+   This command will perform the actual configuration by checking 
+   for requiered software components and installation options.
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Compiling the distribution</title>
+   <para>
+   To build the environment enter the command below:
+   <programlisting>
+   gmake all
+   </programlisting>
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Installing globally on the target system</title>
+   <para>
+   Currently there is no automatic procedure available. You need to copy
+   the compolents from the following directories manually into some reasonable
+   directories.
+   </para>
+   <programlisting>
+linux-gnu-i686-bin
+linux-gnu-i686-doc
+linux-gnu-i686-include
+linux-gnu-i686-install
+linux-gnu-i686-lib
+   </programlisting>
+   </sect2>
+
+   <sect2>
+      <title>GPS Support</title>
+      <para>This release contains some files to support the GPS environment
+      from ACT. The source root directory contains a file which is called 
+      gnu.xml which contains extensions in the GPS menus allowing you to 
+      configure and to compile the release from the GPS environment. This file
+      should be installed locally in the directory .gps/customize or in the 
+      installation directory of GPS as described in the documents.</para>
+      <para>The HTML based documentation is also made available via GPS
+      if the environment variable GPS_DOC_PATH contains the place where 
+      ODB is installed.</para>
+
+   </sect2>
+
+</sect1>
+</chapter>
+
+<chapter id="basics"><?dbhtml filename="basics.html">
+   <title>ODB Basics</title>
+   <para>This section gives an brief overview about the ODB package from 
+   the programers point of view</para>
+
+   <para>An object is an instance of a class. A class is assumed to be 
+   implemented as an Ada 95 package which exports a data type and operations
+   on this data type.</para>
+
+   <sect1>
+      <title>Object Model of ODB</title>
+
+      <para>Persistent objects are always derived from the type 
+      ODB.Persistent.Object. All persistent objects are allocated in 
+      dedicated storage pool. Each object in the storage pool is linked
+      to a so called object table which is contained in the ODB.Persistent
+      package.</para>
+       
+      <para>Since the type Persistent.Object is abstract, the implementation
+      for the following methods has to be provided by any implementation
+      of persistent object:</para>
+
+         <itemizedlist mark=opencircle>
+            <listitem><para>Factory</para>
+            </listitem>
+            <listitem><para>Serialize</para>
+            </listitem>
+            <listitem><para>Deserialize</para>
+            </listitem>
+         </itemizedlist>
+
+      <para>The function Factory return a pointer to an instance of the 
+      class.</para>
+      <para>Serialize writes out the object attributes into a memory stream
+      and at the same time it has to setup the header information of an 
+      instance. The header contains a list of all attributes stored in the 
+      object and the corresponding offsets.</para>    
+   </sect1>
+
+   <sect1>
+      <title>Object Life Cycle</title>
+
+      <para>In order to make an persistent object really persistent,
+      the object has to be named. Otherwise, the application would not
+      be able to retrieve the object.</para>
+
+      <sect2>
+         <title>Loading objects</title>
+
+      <para>Upon startup of an application using ODB, all types which
+      are intended to be stored in the object store are registered in 
+      the ODB.Persistent package. Together with the type name, the 
+      pointer to a procedure is stored. This procedure is called Factory
+      and is used to create an object of the given type in the memory.</para>
+      <para>When reading in an object from the object store, the type 
+      name is looked up in the list of all registered factories and the 
+      factory is called to create the actual instance.
+      <programlisting>
+   function Factory return Persistent.Reference is
+      Result : Reference := new Object;
+   begin
+      Handle( Result ).Data := new Object_Data_Type;
+      return Result;
+   end;
+      </programlisting>      
+      Important to note is that the new operation is used together with
+      the Reference type. This forces the object to be allocated in the 
+      storage_pool of the object management.
+      </para>
+      <para>In addition to the registration of the Factory for the class,
+      the attributes have to be declared for the object implementation.
+      </para>
+      <para>Attribute names are used to map fields of an Ada 95 object between
+      data entries in the storage. As a consequence fields may be added
+      to the object during development of the application and the object 
+      stay still loadable.</para>
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="loading.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="loading.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Object Lifecycle</phrase>
+      </textobject>
+      <caption>
+         <para>The sequence of calls when loading an object from the object</para>
+      </caption>
+      </mediaobject>
+
+      <para>Object are loaded from the storage by means of the Deserialize
+      proceudure. This is an abstract procedure which has to be provided by
+      the implementation:
+
+      <programlisting>
+   procedure Deserialize(
+      Item   : in out Object;
+      Header : in Storage_Header.Handle;
+      S      : in Stream_Access );
+      </programlisting>
+      The purpose of this function is to read in the object attributes from
+      the given stream. The  storage_header contains the fields and the offset
+      of the attributes within the memory stream.
+      <programlisting>
+
+   procedure Deserialize(
+      Item   : in out Object;
+      Header : in Storage_Header.Handle;
+      S      : in Stream_IO.Stream_Access ) is
+      Field  : String_Array.Handle := Attributes( Header.all );
+   begin
+      for i in Field'Range loop
+         declare
+           ID     : Natural;
+           Offset : Natural;
+           Name   : constant String := To_String( Field(i) );
+         begin
+            ID := Classes.Attribute( Object'Tag, Name );
+            if ID /= 0 then
+               Offset := Storage_Header.Lookup_Attribute( Header.all, Name );
+               Read_Offset( S, Offset );
+
+               case ID is
+                  when D_Name  =>
+                     Item.Name := Unbounded_String'Input(S);
+
+                  when D_Street =>
+                     Item.Street := Unbounded_String'Input(S);
+
+		   ............
+
+                  when Others =>
+                     null;
+               end case;
+            end if;
+         exception
+            when Storage_Header.Unknown_Attribute =>
+               null;
+         end;
+      end loop;
+
+      String_Array.Free( Field );
+   end Deserialize; 
+      </programlisting>
+      This procedure reads in all attributes which have been listed in the 
+      object header. For each field in the header registered field id  and the 
+      offset in the object storage is looked up. The read pointer is set to 
+      the found offset and the data type is read in. If a attribute name is 
+      not known in the class the field will be ignored.
+      </para>
+      <para>
+      During startup of the application the package will register the attribute
+      names and the corresponding id by the following code fragment:
+      <programlisting>
+          
+   Class_Id := Classes.Register_Factory( Object'Tag, Factory'Access );
+
+   Classes.Attribute( Class_Id, "D_Name",  D_Name  );
+   Classes.Attribute( Class_Id, "D_Used",  D_Used  );
+   Classes.Attribute( Class_Id, "D_Pairs", D_Pairs );
+
+      </programlisting>
+      </para>
+		        
+      </sect2>
+
+      <sect2>
+      <title>Storing Objects</title>
+      
+      <para>When an application decides to terminate it self, the application
+      may decide to store all persistent objects into a persistent storage 
+      media by calling the procedure Save.</para>
+      <para>When calling the procedure Save (e.g. from the component 
+      ODB.Storage.File), all named objects are stored on a permanent storage 
+      media. This is  done by running through a table which contains all 
+      persistent information.</para>
+
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="saving.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="saving.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Object Lifecycle</phrase>
+      </textobject>
+      <caption>
+         <para>The sequence of calls when saving a object to the object
+	 storage.</para>
+      </caption>
+      </mediaobject>
+
+      <para>Objects are written by means of the Serialize procedure into 
+      a temporary work space, from where the complete object written out
+      into a storage media.
+      <programlisting>
+   procedure Serialize(
+      Item   : in out Object; 
+      Header : in Storage_Header.Handle;
+      S      : in Stream_Access ) is abstract;
+      </programlisting>
+      The purpose of this procedure is to write the contents of the attributes
+      into the object storage and the storing the offset of each attribute 
+      in the storage header information of the object.
+      <programlisting>
+  procedure Serialize(
+      Item   : in out Object;
+      Header : in Storage_Header.Handle;
+      S      : in Stream_IO.Stream_Access ) is
+   begin
+      Register_Attribute( Header.all, D_Street, Write_Offset( S ), Object'Tag );
+      Unbounded_String'Output( S, Item.Street );
+
+      Register_Attribute( Header.all, D_Name, Write_Offset( S ), Object'Tag );
+      Unbounded_String'Output( S, Item.Name );
+
+      .......
+   end Serialize;
+
+      </programlisting>     
+      In order to simplify the development, the odl translator generates 
+      automatically such procedures.</para>
+      </sect2>
+
+      <sect2>
+         <title>Reading/Writing Objects</title>
+	 <para>As already mentioned previously the implementation of the 
+	 read and write procedures have to be symetric, which means what has
+	 been written by the Searialize procedure has to to be readable by the 
+	 Deserialize procedures. Besides of this fact, there are some basic 
+	 rules to be followed:
+
+         <itemizedlist mark=opencircle>
+            <listitem><para>References to other objects can only be stored
+	    as references to objects. ODB.Persistent provide a Read/Write method
+	    for this type and will resolve the references to other objects
+	    in the object store automatically.</para>
+            </listitem>
+            <listitem><para>Dynamic data structures have to be resolved by 
+	    the object implementation, e.g. as in the previous example the 
+	    array of pairs R.Pairs.</para>
+            </listitem>
+            <listitem><para>Any access types in the object have to be resolved
+	    by the object implementation (e.g. the ODB.Collection. class)</para>
+            </listitem>
+            <listitem><para>For reading and writing use always the operations
+	    Input/Output.</para>
+            </listitem>
+         </itemizedlist>
+	 </para>
+	 <para>Since the ODL translator is available under normal circumstance
+	 the implementation of the read/write procedure by hand is not nessescary
+	 since the ODL translator creates the code is self.</para>
+      </sect2>
+   </sect1>
+
+   <sect1>
+      <title>ODB API</title>
+      <para>ODB provides an API to  handle persistent objects. This 
+      API allowes to Name, lookup and delete objects. The detailed 
+      description can be found in the annex of this document</para>
+   </sect1>
+
+   <sect1>
+      <title>Connection with the storage media</title>
+      <para>Objects are always serialized/deserialized into a memory
+      buffer (see ODB.Storage). Depending on the storage strategy
+      the serialization buffer will be transferred to or from the 
+      target media.</para>
+
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="storage.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="storage.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Storage</phrase>
+      </textobject>
+      <caption>
+         <para>Connection with the storage media</para>
+      </caption>
+      </mediaobject>
+      <para>The media specific implementation defined the order in which
+      objects are retrieved from the object table in ODB.Persistent.</para>
+      
+      <para>The ODB.Storage.File package retrieves all objects from the 
+      object table in sequence and writes the object names into a so called
+      index file and each object is written an individual file.</para>
+      <para>The individual objects are stored in single files.</para>
+   </sect1>
+</chapter>
+
+<chapter id="implementation"><?dbhtml filename="impl.html">
+   <title>Implemenation</title>
+
+   <sect1>
+      <title>Package Structure</title>
+      <para>The figure below shows the package structure of the ODB software.
+      The application need to provide at least two packages. One package 
+      which contains the persistent class and the application package which 
+      uses the persistent class in some sense.</para>
+
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="packages.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="packages.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Package Structure</phrase>
+      </textobject>
+      <caption>
+         <para>Package Structure of ODB</para>
+      </caption>
+      </mediaobject>
+
+      <sect2>
+         <title>ODB.Persistent</title>
+	 <para>This package contains the implementation of a storage pool
+	 which is used to allocate the memory of persistent objects. Within
+	 this package a table is maintained which contains references to all
+	 persistent objects ever allocated during the life time of the application.
+	 </para>
+      </sect2>
+
+      <sect2>
+         <title>ODB.Storage</title>
+	 <para>This package implements the basic strategies to save or retrieve
+	 an object.</para>
+      </sect2>
+
+      <sect2>
+         <title>ODB.Storage.File</title>
+	 <para>This package implements the strategy to store the object into 
+	 the file system.</para>
+      </sect2>
+      <sect2>
+         <title>ODB.Memory_Stream</title>
+	 <para>This package allows to read/write via a stream from/into 
+	 a memory buffer. Is provides additonaly to the normal stream 
+	 feature operations which are need to navigate directly in the
+	 storage buffer of the stream.
+	 </para>
+      </sect2>
+
+      <sect2>
+         <title>ODB.Storage_Header</title>
+	 <para>The data stored for each object is based on two parts the 
+	 so called storage header and the data it self. The data part is
+	 handled by the ODB.Storage package. The header information stored
+	 in the storage header contains for each attribute of the object 
+	 an offset in the data storage where the attribute begins. This 
+	 information is build up during serialization of the object.
+	 </para>
+      </sect2>
+   </sect1>
+
+   <sect1>
+      <title>Classes</title>
+      <para>Since classes in Ada 95 line up with packages each package 
+      from the previous chapter represents a class as shown below:</para>
+      <mediaobject>
+      <imageobject>
+      <imagedata fileref="classes.eps" format="eps">
+      </imageobject>
+      <imageobject>
+      <imagedata fileref="classes.gif" format="gif">
+      </imageobject>
+      <textobject>
+      <phrase>Storage</phrase>
+      </textobject>
+      <caption>
+         <para>Class Hirarchy</para>
+      </caption>
+      </mediaobject>
+
+      <para>Important to understand is that the class ODB.Persistent 
+      is an abstract interface which has to be implemented by persistent 
+      objects.
+      </para>
+   </sect1>
+</chapter>
+</part>
+
+<part id="part2"><?dbhtml filename="using.html">
+   <title>User Guide to ODB</title>
+
+<chapter id="applications"><?dbhtml filename="apps.html">
+   <title>Building Applications</title>
+   <para>Building an application using persistent objects requires to 
+   defined the objects to be handled as persistent objects and to add
+   some basic glue code to your application as shown below:
+
+   <example>
+   <title>A minimal Application</title>
+   <programlisting>
+with MyObject;
+with ODB.Persistent;        
+with ODB.Storage.File;             ......          
+use  ODB;
+procedure Main is 
+   O          : ODB.Reference ;
+   File_Store : File.Object;
+begin
+   File.Load(File_Store);
+
+   O := Lookup_Object( "First_Object" );
+   if O = null then     
+      O := new MyObject.Object;
+      Object_Name( O, "First_Object" );
+   
+      O.A := 1;
+   end if;
+   ........... do some thing ......
+
+   File.Save(File_Store);
+exception
+   when Others =>
+      ,.......
+end Main;
+   </programlisting>
+   </example>
+   In order to use persistency for certain objects you need to define
+   these objects in separate packages. This may be done completely by
+   using Ada 95 or by means of the object definition language (ODL) which
+   is an extension of Ada 95. In the example above, this has been done 
+   in the package MyObject which provides a persistent data type 
+   Object.</para>
+   <para>Upon start of the application, it will be checked if the object 
+   is already known in the persistency store with the name "First_Object".
+   If not, the object will be allocated by means of the new 
+   method.</para>
+ </chapter>
+
+<chapter id="modelling"><?dbhtml filename="model.html">
+   <title>Modelling Objects</title>
+      <para>Since ODL is only a minor extension of Ada 95 only the 
+      extensions are described below on basis of examples.</para>
+      <para>The example below (Test.odb) shows a short fragment. It 
+      defines the two types X, Object. The type object is defined as
+      a persistent object which is defined in more detail in the 
+      private section of the file.
+      <example>
+      <title>A minimal Object Model file</title>
+         <programlisting>
+package Test  is
+
+   type Object is persistent private;
+
+   type X is new Integer;
+
+private
+
+   type Object is persistent record
+          A,X,Y   : attribute Integer ;                 -- this goes into the DB
+          B       : attribute String(1..50) ;           -- this also
+          C       : Integer := 2222;                    -- this not
+       end record ;
+
+end Test;
+	 </programlisting> 
+      </example>
+      Each field of Object can be marked with the keyword attribute. This 
+      keyword indicates, that these parameters will be made persistent. All
+      other field will stay transient. Initializers for all fields may be 
+      used but they will only be invoked when the object is first created,
+      with the exception, that fields, which are not attributes, will be 
+      set to these values when the application loads the objects.
+      </para>
+
+      <sect1>
+         <title>Definition of persistent Objects</title>
+
+	 <para>This section describes how persistent object are defined
+	 in the ODL language.</para>
+
+      <sect2>
+         <title>Object definition clause</title>
+	 <para>This keyword may be used in a type definition of a record.
+	 The keyword indicates, that the following record definition defines
+	 a persistent object.
+	 
+         <example>
+         <title>Syntax: persistent object definition</title>
+         <programlisting>
+	    'type' &lt;name&gt; 'is' 'persistent' 
+	          'record' &lt;attributes;&gt; 'end' 'record'
+	 </programlisting> 
+         </example>
+	 </para>
+      </sect2>
+
+      <sect2>
+         <title>Attribute Definition Clause</title>
+	 <para>The attribute keyword may only be used within persistent
+	 object. Itr allows to indicate those fields which will be stored
+	 in the persistent object storage.
+
+         <example>
+         <title>Syntax: Attribute Definition</title>
+         <programlisting>
+	    attribue def; ::= &lt;field&gt; &lt;attribute def&gt;
+	    field ::= &lt;name list&gt; ':' [ &lt;attribute&gt ] &lt;type def&gt;
+	 </programlisting> 
+         </example>
+	 All fields in a persistent object which are not marked as an attribute
+	 will not be stored in the object storage.
+	 </para>
+      </sect2>
+      </sect1>
+
+      <sect1>
+         <title>Deriving persistent objects</title>
+	 <para>In order to support inheritance the ODL allows to derive 
+	 new persistent types from a persistent type.</para>
+      <sect2>
+         <title>ISA Clause</title>
+	 <para>The attribute keyword may only be used within persistent
+	 object. Itr allows to indicate those fields which will be stored
+	 in the persistent object storage.
+
+         <example>
+         <title>Syntax: ISA Clause </title>
+         <programlisting>
+		type &lt;name&gt; ISA &lt;name&gt; with ........... ;
+	 </programlisting> 
+         </example>
+
+	 </para>
+      </sect2>
+      </sect1>
+</chapter>
+
+<chapter id="tools"><?dbhtml filename="tools.html">
+   <title>ODB Tools</title>
+   <para>Since object persistency leads to an extension of the Ada language,
+   the ODB provides several tools to manipulate source codes and other 
+   files, which are described in this chapter.</para>
+
+   <sect1>
+      <title>ODL Translator</title>
+      <para>The ODL Translator is a preprocessor for the input sources of 
+      the object model. The object model is always described by the object 
+      definition and the corresponding code. These two parts are contained
+      in different files. Assume for example a object Person, then the 
+      object model is in the file Person.ods and the code of the object is
+      located in Person.odb. The ODL Translator assumes, that these files
+      are always available. Out of these files, the ODL translator will 
+      produce code which complies to the ODL object model containing all
+      procedures and functions which are required by ODB.Persistent to be 
+      implemented.</para>
+
+      <cmdsynopsis>
+      <command>odl</command>
+         <arg>-nognatos</arg>
+         <arg>-s</arg>
+         <arg rep=repeat choice=plain><replaceable>name</replaceable></arg>
+      </cmdsynopsis>
+      <table frame=none>
+      <title>Options</title>
+      <tgroup cols=2>
+        <tbody>
+           <row>
+             <entry>-gnatnosref</entry>
+             <entry>Inserts no sref pragma statement in the output code of the 
+	     translator.
+             </entry>
+           </row>
+           <row>
+             <entry>-s</entry>
+             <entry>Run silent, which means no copyright notice etc.
+             </entry>
+           </row>
+        </tbody>
+      </tgroup>
+      </table>
+
+      <sect2>
+         <title>Reserved Words and Names</title>
+	 <para>Since ODL is a preprocessor it will generate code. The 
+	 application code should not use any name within the name space of 
+	 ODL.</para>
+      </sect2>
+
+      <sect2>
+         <title>Limitations</title>
+	 
+	 <para>Since the ODL translator is a preprocessor for your Ada
+	 compiler the line numbers given in the Ada 95 compiler output 
+	 are not always correct.</para>
+      </sect2>
+
+   </sect1>
+
+   <sect1>
+      <title>Object Inspector</title>
+      <para>
+      </para>
+
+      <cmdsynopsis>
+      <command>odlls</command>
+         <arg>-l</arg>
+         <arg rep=repeat choice=plain><replaceable>name</replaceable></arg>
+      </cmdsynopsis>
+      <table frame=none>
+      <title>Options</title>
+      <tgroup cols=2>
+        <tbody>
+           <row>
+             <entry>-l</entry>
+             <entry>Inserts no sref pragma statement in the output code of the 
+	     translator.
+             </entry>
+           </row>
+        </tbody>
+      </tgroup>
+      </table>
+   </sect1>
+
+</chapter>
+</part>
+&api
+&faq
+&gfdl
+&gpl
+
+<colophon>
+<para>
+Draft versions of this book were produced with the
+DocBook DSSSL Stylesheets. Final production was
+performed with LaTex and ps2pdf.
+</para>
+<para>The UML diagrams have been produced using ArgoUML 
+Version 0.14.a4 (see http://argouml.tigris.org).
+</para>
+</colophon>
+
+</book>

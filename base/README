@@ -1,0 +1,144 @@
+This is the Ada Build Environment (ABE). It provides processes
+for the following tasks:
+
+- Documentation based on inline documentation
+- Building a version for local test
+- Building a source and binary distribuition
+- Building rpm files for source and binary distributions
+
+
+The build results are stored localy in the directories:
+
+   <arch>-lib
+   <arch>-bin
+   <arch>-include
+   <arch>-install
+
+
+Installation
+============
+This is the source release of the package which means before 
+using the package you need to recompile the library and install
+it on your system.
+
+Step 0 - Unpacking the release
+  gunzip -c adadba-src-<version>.tar.gz | tar xvf -
+
+
+Step 1 - Configuration
+
+  Check the correct settings in etc/site.conf.
+  Run the configure utility
+
+   ./configure
+
+
+Step 2 - Compile
+
+  Execute in the installation directory the following 
+  command(s):
+
+  gmake
+
+Step 4 - Generate Documentation
+
+  gmake documentation
+
+  The documentation will be located under doc.
+
+Step 5 - Systemwide installation
+
+  su - ....
+  gmake install
+
+
+Using ABE
+=========
+
+The directory tree looks like this
+
+./adadoc        -- location of the ada doc utility
+./autoconf	-- directory with the configuration code
+./base		-- components of the abe environment
+./bin		-- executable used by the abe environment
+./etc		-- some site specific configuration files
+./pkg-config	-- files for the GNU pkg-config utility
+./rpm		-- files for the rpm utility
+./doc		-- documentation, including application documentation
+./apps		-- place where the user of ABE is putting his applications
+./samples	-- some samples of the user application
+./src		-- application library source code 
+./util		-- utility library
+
+
+Author / Contact
+================
+
+M.Erdmann   Michael.Erdmann@snafu.de
+
+
+
+This is an Ada 95 project on a linux platform. It has been developed
+using an standard framework for such developments. The build results
+are stored localy in the directories:
+
+   <arch>-lib
+   <arch>-bin
+   <arch>-include
+   <arch>-install
+
+
+Installation
+============
+This is the source release of the package which means before 
+using the package you need to recompile the library and install
+it on your system.
+
+Step 0 - Unpacking the release
+  gunzip -c adadba-src-<version>.tar.gz | tar xvf -
+
+
+Step 1 - Configuration
+
+  Check the correct settings in etc/site.conf.
+  Run the configure utility
+
+   ./configure
+
+
+Step 2 - Compile
+
+  Execute in the installation directory the following 
+  command(s):
+
+  gmake
+
+Step 4 - Generate Documentation
+
+  gmake documentation
+
+  The documentation will be located under doc.
+
+Step 5 - Systemwide installation
+
+  su - ....
+  gmake install
+
+
+Test
+====
+
+
+Modify and adding components
+============================
+
+
+Examples
+========
+
+
+
+
+
+$Revision: 1.1.1.1 $
+

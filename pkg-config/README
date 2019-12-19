@@ -1,0 +1,5 @@
+This file contains the main template for the GNU pkgconfig 
+tool.
+
+apf.pc.in - Is the template
+apf.pc    - Is automatically created during configure 

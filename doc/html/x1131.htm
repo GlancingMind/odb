@@ -1,0 +1,632 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Util.Hash_Table"
+HREF="c1114.htm"><LINK
+REL="PREVIOUS"
+TITLE="Util.Hash_Table"
+HREF="c1114.htm"><LINK
+REL="NEXT"
+TITLE="UTIL.List"
+HREF="c1260.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1114.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 22. Util.Hash_Table</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1260.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN1131"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1133"
+></A
+>Generic Package Parameter(s)</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   type Key_Type is private ; 
+ </PRE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1136"
+></A
+>procedure Put</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Put(  
+       This   : in out Table_Type; 
+       Key    : in Key_Type; 
+       Value  : out Natural ); 
+ </PRE
+><PRE
+CLASS="PROGRAMLISTING"
+>   Table_Full        : exception; 
+   Key_Already_Used  : exception; 
+   Key_Not_Existing  : exception; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1140"
+></A
+>Description</H4
+><P
+>    This method stores the key and the container element in the 
+    keyed container. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1143"
+></A
+>Preconditions</H4
+><P
+>    P.1  - Item /= null </P
+><P
+>    P.2  - Number of stored keys &lt; capacity. </P
+><P
+>    P.3  - Key not already stored </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1148"
+></A
+>Postconditions</H4
+><P
+>    C.1  - An additional key/value pair has been added to the </P
+><P
+>           container. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1152"
+></A
+>Exceptions</H4
+><P
+>    Table_Full - P.2 violated </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1154"
+></A
+>function Get</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Get(  
+       This : in Table_Type; 
+       Key  : in Key_Type ) return Natural; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1157"
+></A
+>Description</H4
+><P
+>    Retrieve a container element from the container. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1159"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Key exisits in container </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1162"
+></A
+>Postconditions</H4
+><P
+>    C.1 - Funtion yield handle to copy of the container element </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1164"
+></A
+>Exceptions</H4
+><P
+>    Key_Not_Existing  - P.1 violated </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1166"
+></A
+>Notes</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1168"
+></A
+>function Key</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Key(  
+       This : in Table_Type; 
+       Hash : in Natural ) return Key_Type; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1171"
+></A
+>Description</H4
+><P
+>    Get the key associated with the hash code </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1173"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Hash code is used </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1175"
+></A
+>Postconditions</H4
+><P
+>    C.1 - The yields key </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1178"
+></A
+>Exceptions</H4
+><P
+>    Key_Not_Existing - P.1 violated </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1180"
+></A
+>Notes</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1182"
+></A
+>procedure Remove</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Remove(  
+      This : in out Table_Type; 
+      Key  : in Key_Type ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1185"
+></A
+>Description</H4
+><P
+>    Remove a key from the container </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1188"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Key exists in container </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1191"
+></A
+>Postconditions</H4
+><P
+>    C.1 - The container_element held by the container is deallocated </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1193"
+></A
+>Exceptions</H4
+><P
+>    Key_Not_Existing - P.1 violated </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1195"
+></A
+>procedure Clear</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Clear(  
+       This : in out Table_Type); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1198"
+></A
+>Description</H4
+><P
+>    Clear the container </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1201"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1204"
+></A
+>Postconditions</H4
+><P
+>    C.1 - All objects held by the container are destroyed. The </P
+><P
+>          nbr of free entries = capacity. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1207"
+></A
+>Exceptions</H4
+><P
+>    None </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1209"
+></A
+>Notes</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1211"
+></A
+>function Is_Empty</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Is_Empty(  
+      This    : in Table_Type) return Boolean; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1214"
+></A
+>Description</H4
+><P
+>    Check if empty </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1217"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1220"
+></A
+>Postconditions</H4
+><P
+>    C.1 - return true if nbr_of_entries = 0 </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1222"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1224"
+></A
+>function Contains</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Contains(  
+      This    : in Table_Type; 
+      Key     : in Key_Type ) return Boolean; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1227"
+></A
+>Description</H4
+><P
+>    check if key or a element is in the container </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1230"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1233"
+></A
+>Postconditions</H4
+><P
+>    C.1 - either true or false or the key handle. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1236"
+></A
+>Exceptions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1239"
+></A
+>Notes</H4
+><P
+>    Both procedures are not optimized for speed. In case of large 
+    tables this might be a real problem for the performance of your 
+    application code. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1242"
+></A
+>procedure Dictionary</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Dictionary(  
+      This    : in  Table_Type; 
+      Keys    : out Dictionary_Table; 
+      Length  : out Natural );     
+ 
+   Dictionary_Overflow : exception; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1245"
+></A
+>Description</H4
+><P
+>    Returns the list of all keys in the container </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1248"
+></A
+>Preconditions</H4
+><P
+>    P.1 - The number of entries in the container is not larger then </P
+><P
+>          the provided dictionary table </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1252"
+></A
+>Postconditions</H4
+><P
+>    C.1 - length is set to the actual number of entries in the </P
+><P
+>          dictionary. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1256"
+></A
+>Exceptions</H4
+><P
+>    Dictionary_Overflow - P.1 violated. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1258"
+></A
+>Notes</H4
+><P
+>    None </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1114.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1260.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Util.Hash_Table</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1114.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>UTIL.List</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,260 @@
+<HTML
+><HEAD
+><TITLE
+>ODB Tools</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="User Guide to ODB"
+HREF="using.html"><LINK
+REL="PREVIOUS"
+TITLE="Deriving persistent objects"
+HREF="x270.htm"><LINK
+REL="NEXT"
+TITLE="Object Inspector"
+HREF="x307.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x270.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x307.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="TOOLS"
+></A
+>Chapter 7. ODB Tools</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="tools.html#AEN282"
+>ODL Translator</A
+></DT
+><DT
+><A
+HREF="x307.htm"
+>Object Inspector</A
+></DT
+></DL
+></DIV
+><P
+>Since object persistency leads to an extension of the Ada language,
+   the ODB provides several tools to manipulate source codes and other 
+   files, which are described in this chapter.</P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN282"
+></A
+>ODL Translator</H1
+><P
+>The ODL Translator is a preprocessor for the input sources of 
+      the object model. The object model is always described by the object 
+      definition and the corresponding code. These two parts are contained
+      in different files. Assume for example a object Person, then the 
+      object model is in the file Person.ods and the code of the object is
+      located in Person.odb. The ODL Translator assumes, that these files
+      are always available. Out of these files, the ODL translator will 
+      produce code which complies to the ODL object model containing all
+      procedures and functions which are required by ODB.Persistent to be 
+      implemented.</P
+><P
+><B
+CLASS="COMMAND"
+>odl</B
+>  [-nognatos] [-s]  <TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>... </P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN291"
+></A
+><P
+><B
+>Table 7-1. Options</B
+></P
+><TABLE
+BORDER="0"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>-gnatnosref</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Inserts no sref pragma statement in the output code of the 
+	     translator.
+             </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>-s</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Run silent, which means no copyright notice etc.
+             </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN301"
+></A
+>Reserved Words and Names</H2
+><P
+>Since ODL is a preprocessor it will generate code. The 
+	 application code should not use any name within the name space of 
+	 ODL.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN304"
+></A
+>Limitations</H2
+><P
+>Since the ODL translator is a preprocessor for your Ada
+	 compiler the line numbers given in the Ada 95 compiler output 
+	 are not always correct.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x270.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x307.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Deriving persistent objects</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="using.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Object Inspector</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

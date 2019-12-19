@@ -1,0 +1,7 @@
+MANIFEST.local
+Makefile
+customer.odb
+customer.ods
+main.adb
+person.odb
+person.ods

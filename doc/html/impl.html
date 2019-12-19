@@ -1,0 +1,257 @@
+<HTML
+><HEAD
+><TITLE
+>Implemenation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Introduction"
+HREF="part1.html"><LINK
+REL="PREVIOUS"
+TITLE="Connection with the storage media"
+HREF="x182.htm"><LINK
+REL="NEXT"
+TITLE="Classes"
+HREF="x226.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x182.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x226.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="IMPLEMENTATION"
+></A
+>Chapter 4. Implemenation</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="impl.html#AEN199"
+>Package Structure</A
+></DT
+><DT
+><A
+HREF="x226.htm"
+>Classes</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN199"
+></A
+>Package Structure</H1
+><P
+>The figure below shows the package structure of the ODB software.
+      The application need to provide at least two packages. One package 
+      which contains the persistent class and the application package which 
+      uses the persistent class in some sense.</P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="packages.gif"><DIV
+CLASS="CAPTION"
+><P
+>Package Structure of ODB</P
+></DIV
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN211"
+></A
+>ODB.Persistent</H2
+><P
+>This package contains the implementation of a storage pool
+	 which is used to allocate the memory of persistent objects. Within
+	 this package a table is maintained which contains references to all
+	 persistent objects ever allocated during the life time of the application.
+	 </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN214"
+></A
+>ODB.Storage</H2
+><P
+>This package implements the basic strategies to save or retrieve
+	 an object.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN217"
+></A
+>ODB.Storage.File</H2
+><P
+>This package implements the strategy to store the object into 
+	 the file system.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN220"
+></A
+>ODB.Memory_Stream</H2
+><P
+>This package allows to read/write via a stream from/into 
+	 a memory buffer. Is provides additonaly to the normal stream 
+	 feature operations which are need to navigate directly in the
+	 storage buffer of the stream.
+	 </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN223"
+></A
+>ODB.Storage_Header</H2
+><P
+>The data stored for each object is based on two parts the 
+	 so called storage header and the data it self. The data part is
+	 handled by the ODB.Storage package. The header information stored
+	 in the storage header contains for each attribute of the object 
+	 an offset in the data storage where the attribute begins. This 
+	 information is build up during serialization of the object.
+	 </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x182.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x226.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Connection with the storage media</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part1.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Classes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

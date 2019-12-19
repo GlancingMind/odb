@@ -1,0 +1,464 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB.Transaction"
+HREF="c988.htm"><LINK
+REL="PREVIOUS"
+TITLE="ODB.Transaction"
+HREF="c988.htm"><LINK
+REL="NEXT"
+TITLE="ODB.XML"
+HREF="c1088.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c988.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. ODB.Transaction</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1088.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN1002"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1004"
+></A
+>procedure Initialize</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Initialize(  
+      Size : in Natural ); 
+ </PRE
+><PRE
+CLASS="PROGRAMLISTING"
+>   Invalid_Transaction : exception; 
+   Invalid_Usage       : exception; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1008"
+></A
+>Description</H4
+><P
+>    Initialize the transaction manager package to handle the given 
+    number of transactions. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1011"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Transaction Manager not initialized. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1014"
+></A
+>Postconditions</H4
+><P
+>    C.1 - The object value is the same as at the time of the invokation </P
+><P
+>          of the start method. </P
+><P
+>    C.2 - Transaction is still active. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1018"
+></A
+>Exceptions</H4
+><P
+>    P.1 - Unvalid_Use </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1020"
+></A
+>procedure Finalize;</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Finalize;  
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1023"
+></A
+>Description</H4
+><P
+>    Shuttdown the transaction management </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1025"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Transaction manager is Initialized. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1027"
+></A
+>Postconditions</H4
+><P
+>    C.1 - All tranaction data is lost. 
+    C.2 - Transaction Monitoring is stoped. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1029"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1031"
+></A
+>procedure Start</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Start(  
+      This     : in out Object; 
+      Instance : in Persistent.Reference ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1034"
+></A
+>Description</H4
+><P
+>    Start a transaction. This procedure blocks if other processes 
+    do have an active transaction. The transaction is closed either 
+    by the Commit of the Cancel method. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1037"
+></A
+>Preconditions</H4
+><P
+>    P.1 - The transaction package has been initialized by means of the </P
+><P
+>          initialize procedure. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1041"
+></A
+>Postconditions</H4
+><P
+>    C.1 - A copy of the given persistent object is created. 
+    C.2 - The object is locked for other transactions. The method will </P
+><P
+>          block until the instance has been aquiered by the process. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1044"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1046"
+></A
+>procedure Commit</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Commit(  
+      This : in out Object ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1049"
+></A
+>Description</H4
+><P
+>    Close the transaction. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1052"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Transaction has been Started </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1055"
+></A
+>Postconditions</H4
+><P
+>    C.1 - The backup copy of the object is deleted and the object is </P
+><P
+>          available for other processes to aquiere the object by means 
+          of a start operation. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1059"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1061"
+></A
+>procedure Cancel</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Cancel(  
+      This : in out Object ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1064"
+></A
+>Description</H4
+><P
+>    Cancel the current transaction. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1067"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Transction has been started </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1070"
+></A
+>Postconditions</H4
+><P
+>    C.1 - The Original value of the object is restored 
+    C.2 - object is available for other transactions. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1072"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1074"
+></A
+>procedure Rollback</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Rollback(  
+      This : in out Object ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1077"
+></A
+>Description</H4
+><P
+>    Restore the contents of the object to the original value </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1079"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Transaction is active </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1082"
+></A
+>Postconditions</H4
+><P
+>    C.1 - The object value is the same as at the time of the invokation </P
+><P
+>          of the start method. </P
+><P
+>    C.2 - Transaction is still active. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1086"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c988.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1088.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Transaction</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c988.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.XML</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

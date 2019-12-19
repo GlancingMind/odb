@@ -1,0 +1,13 @@
+--
+--
+--
+package body Test is 
+
+   procedure Create is 
+   begin
+      null ;
+   end Create;
+
+begin
+   Register_Object;
+end Test;

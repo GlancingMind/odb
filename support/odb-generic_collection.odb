@@ -1,0 +1,267 @@
+-------------------------------------------------------------------------------
+--                                                                           --
+--  Filename        : $Source: /cvsroot/gnade/odb/support/odb-generic_collection.odb,v $
+--  Version         : $Revision: 1.1 $                                       --
+--  Description     : A collection of persistent objects                     --
+--  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>             --
+--  Created On      : 30-June-2003                                           --
+--  Last Modified By: $Author: merdmann $				     --
+--  Last Modified On: $Date: 2003/07/20 14:42:33 $                           --
+--  Status          : $State: Exp $                                          --
+--                                                                           --
+--  Copyright (C) 2003 Michael Erdmann                                       --
+--                                                                           --
+--  ODB is free software;  you can redistribute it  and/or modify it under   --
+--  terms of the  GNU General Public License as published  by the Free Soft- --
+--  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--  sion.  ODB is distributed in the hope that it will be useful, but WITH-  --
+--  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--  for  more details.  You should have  received  a copy of the GNU General --
+--  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+--  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+--  MA 02111-1307, USA.                                                      --
+--                                                                           --
+--  As a special exception,  if other files  instantiate  generics from this --
+--  unit, or you link  this unit with other files  to produce an executable, --
+--  this  unit  does not  by itself cause  the resulting  executable  to  be --
+--  covered  by the  GNU  General  Public  License.  This exception does not --
+--  however invalidate  any other reasons why  the executable file  might be --
+--  covered by the  GNU Public License.                                      --
+--                                                                           --
+--  Functional Description                                                   --
+--  ======================                                                   --
+--                                                                           --
+--  Restrictions                                                             --
+--  ============                                                             --
+--                                                                           --
+--  References                                                               --
+--  ==========                                                               --
+--  None                                                                     --
+--                                                                           --
+-------------------------------------------------------------------------------
+with Ada.Strings.Unbounded;			use Ada.Strings.Unbounded;
+with Ada.Streams.Stream_IO;                     use Ada.Streams.Stream_IO;
+with Ada.Streams;                               use Ada.Streams;
+with Ada.Tags;     				use Ada.Tags;
+with Ada.Text_IO;				use Ada.Text_IO;
+with Ada.Exceptions;           			use Ada.Exceptions;
+use  Ada;
+
+with ODB.Classes;				use ODB.Classes;
+with ODB.Memory_Stream;				use ODB.Memory_Stream;
+use  ODB;
+    
+with Unchecked_Deallocation;
+
+package body ODB.Generic_Collection is
+
+   Version : constant String := "$Id: odb-generic_collection.odb,v 1.1 2003/07/20 14:42:33 merdmann Exp $";
+
+   -----------------------
+   -- Element_Node_Type --
+   -----------------------
+   type Element_Node_Type ;
+   type Element_Node_Access is access all Element_Node_Type;
+
+   type Element_Node_Type is record
+         Next : Element_Node_Access :=  null;
+	 Data : Data_Type;
+      end record;
+
+   ----------------------
+   -- Object_Data_Type --
+   ----------------------
+   type Object_Data_Type is record
+         Nbr_Elements : Natural := 0;
+
+         Head  : Element_Node_Access := null;
+	 Tail  : Element_Node_Access := null;
+      end record;
+
+   -- this for internal use only.
+   type Handle is access all Object;
+
+   ---------
+   -- Add --
+   ---------
+   procedure Add( 
+      Coll : in out Object_Data_Access;
+      Item : in Data_Type) is 
+      -- add a new element to the collection
+      Elem : Element_Node_Access := new Element_Node_Type;
+   begin
+      Coll.Nbr_Elements := Coll.Nbr_Elements + 1;
+
+      Elem.Data := Item;
+      Elem.Next := null;
+
+      if Coll.Head = null then
+         Coll.Head := Elem;
+      else
+         Coll.Tail.Next := Elem;
+      end if;
+
+      Coll.Tail := Elem;   
+   end Add;
+
+   ------------------------------
+   -- Write_Object_Data_Access --
+   ------------------------------
+   procedure Write_Object_Data_Access(
+      Stream : access Root_Stream_Type'Class;
+      Item   : in Object_Data_Access ) is 
+      P      : Element_Node_Access := Item.Head;
+   begin
+      Natural'Output( Stream, Item.Nbr_Elements );
+      while P /= null loop
+         Data_Type'Output( Stream, P.Data );
+
+         P := P.Next;
+      end loop;
+
+   end Write_Object_Data_Access;
+
+   -----------------------------
+   -- Read_Object_Data_Access --
+   -----------------------------
+   function Read_Object_Data_Access(
+      Stream : access Root_Stream_Type'Class ) return Object_Data_Access is 
+      Result : Object_Data_Access := new Object_Data_Type;
+      Nbr    : Natural := Natural'Input( Stream );
+   begin
+      for i in 1..Nbr loop
+         Add( Result, Data_Type'Input(Stream) );   
+      end loop;      
+
+      return Result ;
+   end Read_Object_Data_Access;
+
+   ----------
+   -- Free --
+   ----------
+   procedure Free( 
+      Elements : in out Element_Array_Access ) is
+
+      procedure Xree is
+         new Unchecked_Deallocation( Element_Array_Type, Element_Array_Access);
+   begin
+      Xree( Elements );
+   end Free;
+
+   ------------
+   -- Verify --
+   ------------
+   function Collection(
+      This : in Reference ) return Object_Data_Access is 
+      -- Verify, that a correct object reference is passed and return the 
+      -- handle 
+   begin
+      if This = null then
+	 Raise_Exception(Invalid_Object'Identity, "null reference" );
+      end if;
+
+      if This.all'Tag /= Object'Tag then
+	 Raise_Exception(Invalid_Object'Identity, External_Tag(This.all'Tag) );
+      end if;
+
+      return Handle( This ).Data;
+   end Collection;
+
+   ------------
+   -- Create --
+   ------------
+   function Create( 
+      Name   : in String ) return Reference is 
+      -- create a collection instance
+      Result : Reference := new Object;
+      Data   : Object_Data_Access := new Object_Data_Type;
+   begin
+      Handle( Result ).Data := Data;
+      Name_Object( Result, Name );
+
+      return Result;
+   end Create;
+
+   -------------
+   -- Destroy --
+   -------------
+   procedure Destroy(
+      This : in out Reference ) is 
+      Coll : Object_Data_Access  := Collection( This );
+      P    : Element_Node_Access := Coll.Head;
+      Tmp  : Element_Node_Access;
+	   
+      procedure Free is
+         new Unchecked_Deallocation( Element_Node_Type, Element_Node_Access);
+
+   begin
+      while P /= null loop
+         Tmp := P;
+         p := P.Next;
+
+	 Free( Tmp );
+      end loop; 
+
+      Destroy( This );
+
+      This := null;
+
+   end Destroy;
+
+   ---------
+   -- Add --
+   ---------
+   procedure Add( 
+      This : in Reference;
+      Item : in Data_Type) is 
+      -- add a new element to the collection
+      Coll : Object_Data_Access  := Collection( This );
+      Elem : Element_Node_Access := new Element_Node_Type;
+   begin
+      Add( Coll, Item );
+   end Add;
+
+   --------------
+   -- Contains --
+   --------------
+   function Contains(
+      This : in Reference;
+      Item : in Data_Type ) return Boolean is
+      -- check if the reference is contained in the collection
+      Coll : Object_Data_Access  := Collection( This );
+      P    : Element_Node_Access := Coll.Head;
+   begin
+      while P /= null loop
+         if P.Data = Item then
+	    return true;
+	 end if;
+         P := P.Next;
+      end loop;
+      
+      return False;
+   end Contains;
+
+   ----------------------
+   -- To_Element_Array --
+   ----------------------
+   function Contents(
+      This     : in Reference ) return Element_Array_Access is
+      -- copy the elements from the collection into the target array
+      Coll     : Object_Data_Access   := Collection( This );
+      Result   : Element_Array_Access := new Element_Array_Type( 1..Coll.Nbr_Elements);
+      P        : Element_Node_Access  := Coll.Head;
+      I        : Natural := Result.all'First;
+   begin
+      while P /= null loop
+         Result(I) := P.Data;
+         P := P.Next;
+	 I := I + 1;
+      end loop;
+      
+      return Result;
+   end Contents;
+
+begin
+   Register_Object;
+end ODB.Generic_Collection;

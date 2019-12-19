@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>GNADE Sotware Release Note</title>
+  <style type="text/css">
+
+.topline { font-size: 24pt; font-family: helvetica;}
+.version { font-size: 16pt; font-family: helvetica;}
+.editorial {font-family: helvetica; font-size: 12pt}
+.headline {font-weight: bold; font-family: helvetica; font-size: 16pt}
+.tocentry {font-family: helvetica;  margin-left: 1.0cm }
+.tocentry1 {font-family: helvetica; margin-left: 2.0cm }
+.abstract { text-align: center; margin-left: 30%; margin-right: 30%}
+
+p,ul,ol,dl {
+          font-family:Helvetica,Arial;
+          margin-left: 1.0cm;
+          margin-right: 2.0cm;
+          }
+pre { font-size:9pt;
+          font-family:courier;
+          margin-left: 1.0cm;
+          margin-right: 2.0cm;
+          text-indent: 20pt;
+          }
+tr,td { font-family:Helvetica,Arial; }
+th    { background-color: #9E9E9E; }
+
+h1   { font-size:16p;  font-family:Helvetica,Arial; font-style:bold; }
+h2   { font-size:12pt; font-family:Helvetica,Arial }
+  </style>
+  <meta name="GENERATOR" content="amaya 6.4+, see http://www.w3.org/Amaya/" />
+</head>
+
+<body>
+
+<center>
+<strong class="topline">Ada 95 Object Persistency Framework</strong><br />
+<strong class="version">Version 0.6.0</strong><br />
+<span class="editorial">Editor M.Erdmann<br />
+9.9.2003</span><br />
+<br />
+<strong class="abstract">Abstract</strong> 
+
+<p>The objective of the ODB project is to proivide a framework for a seamless
+integration</p>
+
+<p>of object persistency into Ada 95 applications.</p>
+</center>
+<hr />
+
+<h1><span class="headline">Contents</span></h1>
+<span class="tocentry"><a href="#Overview">Overview</a></span><br />
+<br />
+<span class="tocentry"><a href="#Legal">Legal Stuff</a></span><br />
+<span class="tocentry1"><a href="#License">Copyright</a></span><br />
+<span class="tocentry1"><a href="#Authors">Authors</a></span><br />
+<span class="tocentry1"><a href="#Contributi">Contributions</a></span><br />
+<br />
+<span class="tocentry"><a href="#Contact">Contact</a></span><br />
+<span class="tocentry"><a href="#Features">New Features</a></span><br />
+<span class="tocentry"><a href="#Supported">Product
+Dependencies</a></span><br />
+<span class="tocentry"><a href="#Supported2">Supported Platforms &amp;
+Compilers</a></span><br />
+<span class="tocentry"><a href="#Other">Other components</a></span><br />
+<br />
+<span class="tocentry"><a href="#Problems">Problems</a></span><br />
+<span class="tocentry1"><a href="#Fixed">Fixed Problems</a></span><br />
+<span class="tocentry1"><a href="#Known">Known Problems</a></span><br />
+<span class="tocentry1"><a href="#Restrictio">Restrictions</a></span><br />
+<br />
+<span class="tocentry"><a href="#Installati">Installation</a></span><br />
+<span class="tocentry1"><a href="#nstallatio">Installation on
+linux</a></span><br />
+<span class="tocentry1"><a href="#Installati1">Installation on
+Windows</a></span><br />
+
+
+<h1 class="headline"><a name="Overview" id="Overview">Overview</a></h1>
+
+<p>This is the first release of the ODB project. A simple extension of Ada 95
+has been done to incorperate the object persistency into Ada 95.</p>
+<ul>
+  <li>The object data is stored in an XML based file.</li>
+  <li>Small scale transaction management.</li>
+  <li>A simple extension of the Ada 95 to incorperate persistence in the
+    lagnuage</li>
+  <li>Basic migration scenarios are covered, e.g. deletion and addition of
+    attributes are supported</li>
+  <li>Supports object hirarchies (subsutiability).</li>
+</ul>
+
+<p>Since the documentation is still quite poor, a nice example called
+"Dungons of Wisdom" has been added to demonstrate the usage of the concept in
+the context of an interactive application. The example is located in the
+directory ./samples/dungon.</p>
+
+<p></p>
+
+<p>./samples - Some general examples</p>
+
+<p>./test - Basic tests for several ODB features</p>
+
+<h1 class="headline"><a name="Legal" id="Legal">Legal Stuff</a></h1>
+
+<h2><a name="License" id="License">License and Copyright</a></h2>
+
+<p>The <a href="http://www.gnu.org/">GNU Public License (GPL)</a> applies
+with the following extension to all components of this release</p>
+
+<blockquote>
+  <p><strong><em>As a special exception, if other files instantiate generics
+  from ABE Ada units, or you link ABE Ada units or libraries with other files
+  to produce an executable, these units or libraries do not by itself cause
+  the resulting executable to be covered by the GNU General Public License.
+  This exception does not however invalidate any other reasons why the
+  executable file might be covered by the GNU Public
+  License.</em></strong></p>
+</blockquote>
+
+<p>The documentation has been put under the Free GNU Documentation
+License.</p>
+
+<h2><a name="Authors" id="Authors">Authors</a></h2>
+
+<p>The authors and copyright holders of the ODB project are:</p>
+
+<table style="margin-left: 2.0cm" border="0">
+  <tbody>
+    <tr height="14p">
+      <td>Michael Erdmann</td>
+      <td>&lt;Michael.Erdmann@snafu.de&gt;</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<br />
+
+
+<h2><a name="Contributi" id="Contributi">Contributions</a></h2>
+
+<p>None so far.</p>
+
+<h1 class="headline"><a name="Contact" id="Contact">Contact</a></h1>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <td>Bug Reports</td>
+      <td><a
+        href="http://sourceforge.net/projects/gnade">http://sourceforge.net/projects/gnade</a></td>
+      <td>M.Erdmann</td>
+    </tr>
+    <tr>
+      <td>ODB Discussions</td>
+      <td><a
+        href="http://lists.sourceforge.net/lists/listinfo/gnade-develop">http://lists.sourceforge.net/lists/listinfo/gnade-develop</a></td>
+      <td>M.Erdmann</td>
+    </tr>
+    <tr>
+      <td>Project Page</td>
+      <td><a
+        href="http://gnade.sourceforge.net/">http://gnade.sourceforge.net/</a><br
+        />
+        <a
+        href="http://sourceforge.net/projects/gnade">http://sourceforge.net/projects/gnade</a></td>
+      <td>M.Erdmann</td>
+    </tr>
+    <tr>
+      <td>Dev. Coordination</td>
+      <td>Michael.Erdmann@snafu.de</td>
+      <td>Michael Erdmann</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<h1 class="headline"><a name="Features" id="Features">New Features</a></h1>
+
+<center>
+
+<table width="85%" border="1">
+  <caption></caption>
+  <tbody>
+    <tr>
+      <th>Feature Req,</th>
+      <th>Short Description</th>
+      <th>Version</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p></p>
+
+<p></p>
+
+<h1 class="headline"><a name="Supported" id="Supported">Dependencies</a></h1>
+
+<p></p>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <th width="20%">Product</th>
+      <th width="10%">Version</th>
+      <th>Source / Comments</th>
+    </tr>
+    <tr>
+      <td>XMLAda</td>
+      <td>0.7.1</td>
+      <td>http://libre.act-europe.fr/xmlada/</td>
+    </tr>
+    <tr>
+      <td>GNAT</td>
+      <td>3.14p</td>
+      <td>http://www.act-europe.com/</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p></p>
+
+<h1 class="headline"><a name="Supported2" id="Supported2">Supported Platforms
+/ Compilers</a></h1>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <th width="20%">Compiler</th>
+      <th width="10%">Version</th>
+      <th>Operating Systems</th>
+    </tr>
+    <tr>
+      <td>GNAT</td>
+      <td>3.13p</td>
+      <td>Linux, Windows</td>
+    </tr>
+    <tr>
+      <td>GNAT</td>
+      <td>3.14p</td>
+      <td>Linux (Debian, Redhat, SuSe), Solaris 8, Windows</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p></p>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+      <th>Version</th>
+      <th>Operating System</th>
+      <th>Comments</th>
+    </tr>
+    <tr>
+      <td rowspan="3">ODB</td>
+      <td rowspan="3"></td>
+      <td>1.4.0</td>
+      <td>Linux</td>
+      <td>gnade.sourceforge.net</td>
+    </tr>
+    <tr>
+      <td>1.4.0</td>
+      <td>Solaris 8</td>
+      <td><strong>planed</strong></td>
+    </tr>
+    <tr>
+      <td>1.4.0</td>
+      <td>Linux Debian</td>
+      <td><strong>planed</strong></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p></p>
+
+<h1><a name="Problems" id="Problems">Problems</a></h1>
+
+<p>This section contain an overview of known, fixed problems and restrictions
+(limitations). Please report all errors via the error report system at the
+source forge project page.</p>
+
+<h1><a name="Fixed" id="Fixed">Fixed Problems</a></h1>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <th width="10%">Bug Ref.</th>
+      <th width="8%">Fixed in</th>
+      <th width="50%">Short Description</th>
+      <th>Comments</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<h1 class="headline"><a name="Known" id="Known">Known Problems</a></h1>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <th width="10%">Bug Ref.</th>
+      <th width="50%">Short Description</th>
+      <th>Comments</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<h1 class="headline"><a name="Restrictio"
+id="Restrictio">Restrictions</a></h1>
+<ul>
+  <li>With the intorduction of the XML based format of the object files this
+    or higher version are not compatible any more with any earlier version of
+    ODB. There is no migration path between 0.6.0 and earlier version.</li>
+</ul>
+
+<h1><a name="Installati" id="Installati">Installation</a></h1>
+
+<p>The ABE code and the documentation is distributed in the following
+files:</p>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <td width="30%">File</td>
+      <td width="40%">Contents</td>
+    </tr>
+    <tr>
+      <td>odb-src-&lt;versio&gt;.tar.gz</td>
+      <td>Complete ABE source code distribution GNU compressed tar file</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p>The installation of this software requires the following components:</p>
+
+<center>
+
+<table width="85%" border="1">
+  <tbody>
+    <tr>
+      <th width="20%"><strong>Component</strong></th>
+      <th width="10%"><strong>Version</strong></th>
+      <th width="70%"><strong>Origin</strong></th>
+    </tr>
+    <tr>
+      <td>gzip</td>
+      <td>1.2.4</td>
+      <td>GNU</td>
+    </tr>
+    <tr>
+      <td>unzip</td>
+      <td>5.42</td>
+      <td>Infozip</td>
+    </tr>
+    <tr>
+      <td>zip</td>
+      <td>2.2</td>
+      <td>Infozip</td>
+    </tr>
+    <tr>
+      <td>tar</td>
+      <td>-</td>
+      <td>GNU or native</td>
+    </tr>
+    <tr>
+      <td>autoconf*1</td>
+      <td>2.52</td>
+      <td>GNU</td>
+    </tr>
+    <tr>
+      <td>gmake</td>
+      <td>3.79.1</td>
+      <td>GNU</td>
+    </tr>
+    <tr>
+      <td>gnat</td>
+      <td>3.14p, 3.13p</td>
+      <td>ACT distribution</td>
+    </tr>
+    <tr>
+      <td>gawk</td>
+      <td>3.0.3</td>
+      <td>GNU</td>
+    </tr>
+    <tr>
+      <td>xfig</td>
+      <td></td>
+      <td>GNU</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<h1 class="headline">I<a name="nstallatio" id="nstallatio">nstallation on
+Linux/Unix</a></h1>
+
+<h2>Unpacking and Configuration</h2>
+<pre>$ gunzip -c odb-src-&lt;version&gt;.tar.gz | tar xvf -
+$ cd odb-src-&lt;version&gt;
+$ ./configure  </pre>
+
+<h2>Installation of the Database</h2>
+
+<p>Refere to the GNADE release notes</p>
+
+<h2>Compiling an testing</h2>
+
+<p>After the creation of the data base user, the final build may be done
+by:</p>
+<pre>$ gmake</pre>
+
+<p>Test code is located in the directory ./samples. Please refere to the
+README file in this directory</p>
+
+<h2>Systemwide Installation</h2>
+
+<p>Not available yet. Pleas refere to the reference manual.</p>
+
+<h2>If it does not work</h2>
+
+<p>In any case if you encounter a problem please contact the GNDE team asap
+and or write a bug report as sourceforge.</p>
+
+<p></p>
+<hr />
+<pre>$Id: note_0.6.1.html,v 1.1 2003/10/12 14:05:05 merdmann Exp $</pre>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB.Object_Loader"
+HREF="c610.htm"><LINK
+REL="PREVIOUS"
+TITLE="ODB.Object_Loader"
+HREF="c610.htm"><LINK
+REL="NEXT"
+TITLE="ODB.Object_Writer"
+HREF="c633.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c610.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 13. ODB.Object_Loader</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c633.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN622"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN624"
+></A
+>procedure Read, function Header, function Stream, function InstanceOf, procedure Path</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Read(  
+      This  : in out Object; 
+      Name  : in String ); 
+ 
+   function Header( 
+      This : in Object ) return Storage_Header.Object; 
+ 
+   function Stream(  
+      This : in Object ) return Stream_Access ; 
+ 
+   function InstanceOf( 
+      This : in Object ) return String; 
+ 
+   procedure Path( 
+      This   : in out Object; 
+      Value  : in String ); 
+ 
+ 
+   Invalid_Object : exception ; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN627"
+></A
+>Description</H4
+><P
+>    Read the named object from the application pool </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN629"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The stream has to be valid </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN631"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c610.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c633.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Object_Loader</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c610.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.Object_Writer</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

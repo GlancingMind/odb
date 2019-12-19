@@ -1,0 +1,152 @@
+## ----------------------------------------------------------------------------
+##                                                                           --
+##                                                                           --
+##  Filename        : $Source: /cvsroot/gnade/odb/Makefile.in,v $
+##  Description     : The top level makefile of ABE                          --
+##  Author          : Michael Erdmann <Michael.Erdmann@snafu.de> 	     --
+##  Created On      : 03-Apr-2003					     --
+##  Last Modified By: $Author: merdmann $				     --
+##  Last Modified On: $Date: 2003/10/16 19:24:19 $                           --
+##  Status          : $State: Exp $                                          --
+##                                                                           --
+##  Copyright (C) 2003 Michael Erdmann                                       --
+##                                                                           --
+##  ABE is copyrighted by the persons and institutions enumerated in the     --
+##  AUTHORS file. This file is located in the root directory of the          --
+##  ABE distribution.                                                        --
+##                                                                           --
+##  ABE is free software;  you can redistribute it  and/or modify it under   --
+##  terms of the  GNU General Public License as published  by the Free Soft- --
+##  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+##  sion.  ABE is distributed in the hope that it will be useful, but WITH-  --
+##  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+##  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+##  for  more details.  You should have  received  a copy of the GNU General --
+##  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+##  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+##  MA 02111-1307, USA.                                                      --
+##                                                                           --
+##  As a special exception,  if other files  instantiate  generics from      --
+##  ABE Ada units, or you link ABE Ada units or libraries with other         --
+##  files  to produce an executable, these  units or libraries do not by     --
+##  itself cause the resulting  executable  to  be covered  by the  GNU      --
+##  General  Public  License.  This exception does not however invalidate    --
+##  any other reasons why  the executable file  might be covered by the      --
+##  GNU Public License.                                                      --
+##                                                                           --
+## ----------------------------------------------------------------------------
+##
+##  Functional Description
+##  ======================
+##  This makefile recursively visits subdirectories for the various ABE   
+##  components and performs the make steps there.
+##
+##  make all       - makes the whole ABE    project
+##  make clean     - Clean up the directories but leave the configuration
+##                   data 
+##  make distclean - make a complete clean up
+##  make dist      - Create a distribution based on the information as it 
+##                   is stored in the VERSION file.
+##
+##  Restrictions
+##  ============
+##  None
+##
+##  References
+##  ==========
+##  None
+##
+include ./VERSION
+include make.conf
+sinclude Makefile.local
+ROOT=""
+
+##
+## Subdirectories to be considdered for build production
+##
+CORE=base bin adadoc @pkgconfig@ 
+
+##
+## Default Targets
+##
+all clean install dist ::
+	for f in $(CORE) util src apps support samples test doc ; do \
+	$(MAKE) -C ./$$f UNIT=$$f $@ ; \
+	done
+
+##
+## create a distribution
+##
+dist :: all manifest
+	$(MAKE) -C ./autoconf
+	rm -rf $(DISTNAME)
+	mkdir -p $(SRCDISTNAME)
+	mkdir -p $(SRCDISTNAME)/doc
+	cat $(MANIFEST) | cpio -pdmu $(SRCDISTNAME)
+	cp -a $(docdir)/* $(SRCDISTNAME)/doc
+	cp -a ./doc/releasenotes/*$(VERSION)* $(SRCDISTNAME)/doc
+	tar cvzf $(SRCDISTNAME).tar.gz $(SRCDISTNAME)
+	zip -r $(SRCDISTNAME).zip $(SRCDISTNAME)          
+	rm -rf $(SRCDISTNAME)
+
+##
+##
+##
+manifest ::
+	rm -rf $(MANIFEST)
+	cp ./base/MANIFEST $(MANIFEST)
+	if test -e MANIFEST.local ; then cat MANIFEST.local >> $(MANIFEST); fi
+	for f in doc src util support apps test samples ; do   \
+	   $(MAKE) -C ./$$f manifest UNIT=$$f; \
+	done	
+##
+## install the sofware in the system (requires root)
+##
+install :: 
+	cp gnu.xml $(installdir)
+	$(toolsdir)/install-odb.sh --force --rpmroot=$(ROOT)
+
+##
+## install all build directories
+##
+directories:
+	$(INSTALL) -d $(bindir)
+	$(INSTALL) -d $(libdir)
+	$(INSTALL) -d $(includedir)
+	$(INSTALL) -d $(vardir)
+	$(INSTALL) -d $(installdir)
+	$(INSTALL) -d $(docdir)
+##
+## Clean locally but keep the file system functioning
+##
+clean :: 
+	rm -f *~  *~*~ *.bak
+	rm -f $(includedir)/*
+	rm -f $(libdir)/*
+	rm -f $(bindir)/*
+	rm -f $(installdir)/*
+	rm -rf $(docdir)/*
+
+##
+## clean up the  distribution
+##
+distclean :: clean
+	$(MAKE) -C ./autoconf $@
+	rm -f $(SRCDISTNAME).tar.gz $(BINDISTNAME).tar.gz
+	rm -f $(SRCDISTNAME).zip $(BINDISTNAME).zip
+	rm -f config.* *~ *~*~ *.bak
+	rm -rf $(libdir)
+	rm -rf $(bindir)
+	rm -rf $(includedir)
+	rm -rf $(installdir)
+	rm -rf $(vardir)
+	rm -rf $(docdir)
+	rm -f make.conf Makefile .configure MANIFEST
+
+##
+##
+##
+publish:
+	ncftpput upload.sourceforge.net /incoming $(SRCDISTNAME).tar.gz 
+	ncftpput upload.sourceforge.net /incoming $(SRCDISTNAME).zip 
+

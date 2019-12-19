@@ -1,0 +1,237 @@
+<HTML
+><HEAD
+><TITLE
+> ODB.Classes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="API References"
+HREF="p322.htm"><LINK
+REL="PREVIOUS"
+TITLE="API Reference"
+HREF="x335.htm"><LINK
+REL="NEXT"
+TITLE="API Reference"
+HREF="x365.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x335.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x365.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="AEN340"
+></A
+>Chapter 9.  ODB.Classes</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c340.htm#AEN342"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x365.htm"
+>API Reference</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN342"
+></A
+>Overview</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN344"
+></A
+>Functional Description</H2
+><P
+>  This package maintains a list of all classes (packages) which are 
+  derived from the persistent type ODB.Persistent.Object if the package 
+  has registered it self. </P
+><P
+></P
+><P
+>  The following information is available per class; 
+  - Pointer to the so called factory </P
+><P
+>  - All attribute names of a class. </P
+><P
+></P
+><P
+>  If the application shall support persistence, the following pieces of 
+  code has to be added some where during the initialization. </P
+><P
+>  Class_ID := Classes.Register_Factory( Object'Tag, Factory'Access ); </P
+><P
+>  Classes.Attribute( Class_ID, "D_Name",     D_Name ); 
+  Classes.Attribute( Class_ID, "D_Used",     D_Used ); 
+  Classes.Attribute( Class_ID, "D_Elements", D_Elements ); </P
+><P
+>  This example registers the funtion Factory with Object'tag and adds the 
+  attributes D_Name, D_Used and D_Elements. </P
+><P
+></P
+><P
+>  The factor function creates an instance of the class for which is  the 
+  function has been registered. </P
+><P
+>  Restrictions </P
+><P
+>  In order to serialize/deserialize the object data, for each attribute of 
+  a persistent object a name has to be defined. This is done by means of 
+  the Attribute functions (for a typlica example refer to ODB.Collection). </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN359"
+></A
+>Restrictions</H2
+><P
+>  R.1 - </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN362"
+></A
+>References</H2
+><P
+>  None </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x335.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x365.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>API Reference</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="p322.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>API Reference</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

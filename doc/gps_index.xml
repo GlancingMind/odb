@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<index>
+   <file>
+      <name>/usr/local/odb/doc/html/index.html</name>
+      <descr>Simple Object Database for Ada 95 (ODB)</descr>
+      <category>General</category>
+      <menu>/Help/ODB</menu>
+   </file>
+</index>

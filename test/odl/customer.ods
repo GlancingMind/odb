@@ -1,0 +1,22 @@
+with Person;				use Person;
+
+package Customer  is 
+
+   type Object isa Person.Object with private;
+
+   function Create( 
+      Name   : in String;
+      Street : in String;
+      Id     : in Natural ) return Reference;
+
+   procedure Display(
+      This : in Reference );
+
+private
+
+   type Object isa Person.Object with record
+          CustomerId  : attribute Natural := 0;
+       end record ;
+
+end Customer;
+

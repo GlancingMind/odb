@@ -1,0 +1,375 @@
+<!doctype book public "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity t1     SYSTEM "t1.sgml">
+<!entity t2     SYSTEM "t2.sgml">
+]>
+
+<book id="ASCL"><?dbhtml filename="ascl.html">
+
+<bookinfo>
+<title>ASCL User's Guide</title>
+<subtitle>ASCL, ADA Standard Component Library</subtitle>
+<subtitle>Version 0.1.0</subtitle>
+<subtitle>Document Revision $Revision: 1.1.1.1 $</subtitle>
+<date>$Date: 2003/06/23 07:37:11 $</date>
+<authorgroup>
+<author>
+<firstname>Michael</firstname>
+<surname>Erdmann</surname>
+</author>
+</authorgroup>
+<releaseinfo>Version 0.1</releaseinfo>
+
+<editor>
+<firstname>Michael</firstname>
+<surname>Erdmann</surname>
+</editor>
+
+<publisher>
+<publishername>The ASCL Team</publishername>
+<address><city>Berlin</city></address>
+</publisher>
+
+<printhistory>
+<para>May   2002: First Edition.</para>
+</printhistory>
+
+<revhistory>
+  <revision>
+     <revnumber>$Revision: 1.1.1.1 $</revnumber>
+     <date>$Date: 2003/06/23 07:37:11 $</date>
+     <authorinitials>$Author: merdmann $</authorinitials>
+  </revision>
+</revhistory>
+
+
+<copyright>
+<year>2002</year>
+<holder>M. Erdmann</holder>
+</copyright>
+<legalnotice>
+   <blockquote><para>
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.1
+      or any later version published by the Free Software Foundation;
+      with no Invariant Sections, with the Front-Cover Texts being 
+      "The GNat Ada Database Environment".
+      A copy of the license is included in the section entitled "GNU
+      Free Documentation License".
+   </para></blockquote>
+</legalnotice>
+
+</bookinfo>
+
+<preface id="PREFACE"><?dbhtml filename="ch00.html">
+   <title>Preface</title>
+   <para>
+      This document describes the ASCL project application and 
+      implementation wise. The document is intended as a living document 
+      for developers and users of the ASCL project.
+   </para>
+</preface>
+
+<part id="INTRO"><?dbhtml filename="part1.html">
+   <title>Introduction</title>
+
+<chapter id="objectives"><?dbhtml filename="objectives.html">
+   <title>Project Objectives</title>
+   <para>
+   </para>
+</chapter>
+
+<chapter id="license"><?dbhtml filename="license.html">
+   <title>Software License</title>
+   <para>
+      The GNU Public License (GPL) applies with the following extension to 
+      all software components of this project.
+   </para>
+   <para>
+      As a special exception, if other files instantiate generics from ASCL 
+      Ada units, or you link ASCL Ada units or libraries with other files to 
+      produce an executable, these units or libraries do not by itself cause 
+      the resulting executable to be 
+      covered by the GNU General Public License. This exception does not however 
+      invalidate any other reasons why the executable file might be covered by 
+      the GNU Public License.
+   </para>
+</chapter>
+
+<chapter id="trademarks"><?dbhtml filename="trademarks.html">
+
+   <title>Trademarks</title>
+   <para>
+   <trademark>Red Hat</trademark> is a registered trademark of Red Hat, Inc..
+   </para>
+   <para>
+   <trademark>Linux</trademark> is a registered trademark of Linus Torvalds. 
+   </para>
+   <para>
+   <trademark>UNIX</trademark> is a registered trademark of The Open Group.
+   </para>   
+   <para>
+   <trademark>Alpha</trademark> is a registered trademark of 
+                                the  Digital Equipment Corporation. 
+   </para>
+   <para>
+   <trademark>Windows</trademark>is a registered trademark of the Microsoft Corporation. 
+   </para>
+</chapter>
+
+<chapter id="platforms"><?dbhtml filename="platfforms.html">
+   <title>Supported OS platforms</title>
+   <para>
+   The table below given an overview about the supported 
+   operating systems and compilers. For the detailed versions for 
+   each product, consult the release notes of the relevant ASCL 
+   version.
+      <table>
+         <title>Supported Platforms</title>
+         <tgroup cols=3>
+            <tbody>
+            <row>
+               <entry>Linux Redhat 7.0</entry>
+               <entry>GNAT 1.13p</entry>
+               <entry>Automatically handled by the configure script</entry>
+            </row>
+            </tbody>
+         </tgroup>
+      </table>
+   </para>
+</chapter>
+
+
+<chapter id="getstarted"><?dbhtml filename="getstarted.html">
+<title>Getting started</title>
+<para>
+The ASCL project distribution is currently distributed only as 
+development snapshot, which means the packages do not contains
+any binary files. There for before starting make sure that you 
+have all required tools (see release notes ./doc/releasenotes). 
+</para>
+<para>
+The development package contains the sources for all platforms
+so far supported. ASCL support the two major platforms Windows NT
+and Unix/Linux. The following sections are describing the 
+installation steps for both platforms.
+</para>
+<sect1>
+   <title>Installation on Unix like systems</title>
+   <para>
+   After you  obtained the source code from the net you 
+   need to install and compile it. This chapter describes
+   this first steps of installing the environment onto 
+   your system.
+   </para>
+
+   <sect2>
+   <title>Unpacking the distribution</title>
+   <para>
+   The source code is normally distributed as compressed tar 
+   file. To unpack the distribution execute the command:
+   <programlisting>
+      gunzip -c | tar xvf -
+   </programlisting> 
+   This will unpack the directory tree of the development 
+   environment. 
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Configuring the ASCL installation</title>
+   <para>
+   The ASCL environment may be configured to a certain extend. The file 
+   make.conf.in contains some parameters which might be adopted to the 
+   needs of your system.
+   </para>
+   <para>
+   After unpacking the distribution change into the top level directory 
+   of the ASCL release. Before you run the configure script examine the 
+   contents of the file etc/config.site. 
+   </para>
+   <programlisting>
+site_bindir="/usr/bin"
+site_libdir="/usr/lib"
+site_adadir="/usr/lib/ada"
+   </programlisting>
+   <para>
+   After configuring the correct values runf the configure script
+   in the root directory of the source distribution.
+   <programlisting>
+
+       cd ascl-src-....
+       ./configure      
+
+   </programlisting>
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Compiling the distribution</title>
+   <para>
+   To build the ASCL executable enter the command below:
+   <programlisting>
+   make all
+   </programlisting>
+   This will build all components of the ASCL project and the 
+   test data base is this has not been done previously.
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Installing ASCL globally on the system</title>
+   <para>
+   The development environment is self containing, which means 
+   as long as applications are developed in the directory where
+   ASCL is installed and the make files are used, all components
+   are taken from the ASCL lib directory. This method limits the 
+   use to one user. In order to make ASCL available to all users
+   on your system you need to install the ASCL libraries. Installation
+   is done as root by executing the directory ../gnuada/gnade the 
+   following command:
+   </para>
+   <programlisting>
+      make install
+   </programlisting>
+   <para>
+   This should install the libraries of the ASCL project in 
+   your system. 
+   </para>
+   </sect2>
+</sect1>
+
+<sect1>
+   <title>Installation on Windows NT</title>
+   <para>
+    Building the ASCL project for Windows NT does not require 
+    the configuration step as for Linux. The preconfigured 
+    Makefiles are located in the ./win32 directory.
+   </para>
+
+   <sect2>
+   <title>Unpacking the distribution</title>
+   <para>
+   The source code is normally distributed as ZIP file, which is
+   easy to unpack by means of Windows utilities as e.g WinZip. From
+   the DOS command line use:
+   <programlisting>
+      unzip gnade-src-arch-version.zip
+      cd gnade-src-arch-version 
+   </programlisting> 
+   This will unpack the directory tree of the development 
+   environment. 
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Compiling the distribution</title>
+   <para>
+   As for Unix the compilation process is based upon the 
+   execution of a Makefile. In order to compile the distribution
+   perform the following commands:
+   <programlisting>
+      cd win32
+      make 
+   </programlisting>
+   </para>
+   </sect2>
+
+   <sect2>
+   <title>Installation on your system</title>
+   <para>
+   An automatic and configurable procedure has not been yet
+   developed. 
+   </para>
+   </sect2>
+</sect1>
+
+<sect1>
+   <title>General Installation Hints</title>
+   <sect2>
+      <title>Using Emacs with ASCL</title>
+      <para>
+      The ASCL project uses several file extension which are 
+      not commonly defined in the emacs default configuration.
+      As a consequence syntax high ligthing is not activated. In order 
+      to activate syntax highlighting again the following lines
+      have to be added to to .emacs file in your home directory:
+      </para>
+      <programlisting>
+  (setq auto-mode-alist
+      (append '(("\\.C$"  . c++-mode)
+                ("\\.cc$" . c++-mode)
+                ("\\.hh$" . c++-mode)
+                ("\\.adq$" . ada-mode)
+                ("\\.gpq$" . ada-mode)
+                ("\\.gpb$" . ada-mode)
+                ("\\.c$"  . c-mode)
+                ("\\.h$"  . c-mode))
+              auto-mode-alist))                      
+      </programlisting>
+   </sect2>
+</sect1>
+
+<sect1>
+<title>Prepared Example Programs</title>
+<para>
+      All examples are located in the directories samples and contrib.
+</para>
+</sect1>
+</chapter>
+
+<chapter id="contents"><?dbhtml filename="gnadeparts.html">
+   <title>Contents of the ASCL distribution</title>
+   <para>
+   This section gives a short overview of the production results
+   of the development environment.
+   <table>
+      <title>Production results of the ASCL Project</title>
+      <tgroup cols=3>
+        <tbody>
+           <row>
+             <entry>Data Support</entry>
+             <entry>All Data structure related components
+             </entry>
+             <entry>...</entry>
+           </row>
+	</tbody>
+     </tgroup>
+   </table>
+   </para>
+</chapter>
+
+<chapter id="contact"><?dbhtml filename="contact.html">
+   <title>Contact</title>
+   <para>
+      The home page for the project is located at
+      <ulink url="http://ascl.sourceforge.net">http://ascl.sourceforge.net</ulink>.
+   </para>
+   <para>
+      All project activities are maintained at 
+      <ulink url="http://sourcefroge.net/projects/ascl">http://sourcefroge.net/projects/ascl</ulink>
+   </para>
+   <para>
+   The coordination of the development work is done by: 
+      <address>
+      Michael Erdmann
+      <email>Michael.Erdmann@snafu.de</email>
+      </address>
+   </para>
+</chapter>
+
+<chapter id="authors"><?dbhtml filename="authors.html">
+    <title>Authors</title>
+       <para>
+          These are the authors and copyright holders of the ASCL 
+          software (in alphabetical order of their last name):
+       </para>
+       <programlisting>
+	Michael Erdmann		michael.erdmann@snafu.de
+       </programlisting>
+</chapter>
+
+</part>
+
+&t1
+&t2
+</book>

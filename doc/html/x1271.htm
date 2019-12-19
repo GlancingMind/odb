@@ -1,0 +1,744 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="UTIL.List"
+HREF="c1260.htm"><LINK
+REL="PREVIOUS"
+TITLE="UTIL.List"
+HREF="c1260.htm"><LINK
+REL="NEXT"
+TITLE="Util.Lock_Table"
+HREF="c1422.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1260.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 23. UTIL.List</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1422.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN1271"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1273"
+></A
+>Generic Package Parameter(s)</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   type Item_Type is private; 
+ </PRE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1276"
+></A
+>function List</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function List return Handle;  </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1279"
+></A
+>Description</H4
+><P
+>    Create a list. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1282"
+></A
+>Preconditions</H4
+><P
+> Postconditions: </P
+><P
+></P
+><P
+>    The function returns a list handle. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1286"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1288"
+></A
+>procedure Destroy</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Destroy(  
+      This : in out Handle ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1291"
+></A
+>Description</H4
+><P
+>    Destroy the list </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1294"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The list handle is valid. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1296"
+></A
+>Postconditions</H4
+><P
+>    All allocated resources are returned. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1298"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1300"
+></A
+>procedure Append</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Append(  
+      This : in Handle; 
+      Item : in Item_Type; 
+      Sub  : in Handle := Null_Handle ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1303"
+></A
+>Description</H4
+><P
+>    Append an element to the given list handle </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1305"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The list Handle has to be valid. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1307"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1309"
+></A
+>function Length</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Length(  
+      This : in Handle ) return Natural; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1312"
+></A
+>Description</H4
+><P
+>    Get the length of the list </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1315"
+></A
+>Preconditions</H4
+><P
+>  - C.1 List is valid. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1318"
+></A
+>Postconditions</H4
+><P
+>    - P.1 Nothing changed </P
+><P
+>    - P.2 Returns the length of the list. If the list is empty a 0 </P
+><P
+>          is returned. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1322"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1324"
+></A
+>procedure Execute, procedure Execute, procedure Stop, type List_Reader_Handle</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Execute(  
+      It      : in out Iterator; 
+      Element : in out Item_Type ) is abstract; 
+ 
+   procedure Execute( 
+      This : in Handle; 
+      It   : in out Iterator'Class ); 
+ 
+   procedure Stop( 
+      It   : in out Iterator'Class ); 
+ 
+   type List_Reader_Handle is private; 
+   Null_List_Reader_Handle : constant List_Reader_Handle ; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1327"
+></A
+>Description</H4
+><P
+>    Append an element to the given list handle </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1329"
+></A
+>Preconditions</H4
+><P
+> Postconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1331"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1333"
+></A
+>function List_Reader</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function List_Reader(  
+      This : in Handle ) return List_Reader_Handle; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1336"
+></A
+>Description</H4
+><P
+>    Create a list reader for the given list </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1339"
+></A
+>Preconditions</H4
+><P
+>    C.1 - List is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1342"
+></A
+>Postconditions</H4
+><P
+>    P.1 - The list reader points to the begin of the list. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1344"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+><P
+></P
+><P
+>    In order to loop through a list, use the First function to obtain 
+    the first element in the list. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1349"
+></A
+>procedure Destroy, function Child , procedure Child</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Destroy(  
+      Reader : in out List_Reader_Handle ); 
+ 
+   End_Of_List  : exception ; 
+   Invalid_List : exception ; 
+ 
+   function Child ( 
+      Reader : in List_Reader_Handle ) return Handle; 
+ 
+   procedure Child( 
+      Reader : in List_Reader_Handle; 
+      List   : in Handle ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1352"
+></A
+>Description</H4
+><P
+>    Dstroy the list reader </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1355"
+></A
+>Preconditions</H4
+><P
+>    C.1 - Listreader is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1358"
+></A
+>Postconditions</H4
+><P
+>    P.1 - All allocated resources are deallocated. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1360"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1362"
+></A
+>function First</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function First(  
+      Reader : in List_Reader_Handle ) return Item_Type; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1365"
+></A
+>Description</H4
+><P
+>    Set the reader on the first element </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1367"
+></A
+>Preconditions</H4
+><P
+>    C.1 - Listreader is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1370"
+></A
+>Postconditions</H4
+><P
+>    P.1 - the function returns the first element </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1372"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1374"
+></A
+>function Next</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Next(  
+      Reader : in List_Reader_Handle ) return Item_Type; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1377"
+></A
+>Description</H4
+><P
+>    Set the reader on the first element </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1379"
+></A
+>Preconditions</H4
+><P
+>    C.1 - Listreader is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1382"
+></A
+>Postconditions</H4
+><P
+>    P.1 - the function returns the first element </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1384"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1386"
+></A
+>procedure Append</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Append(  
+      Reader : in List_Reader_Handle; 
+      Data   : in Item_Type ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1389"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><P
+></P
+><P
+>    C.1 - Listreader is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1394"
+></A
+>Postconditions</H4
+><P
+>    P.1 - the function returns the first element </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1396"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1398"
+></A
+>function Current</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Current(  
+      Reader : in List_Reader_Handle ) return Item_Type; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1401"
+></A
+>Description</H4
+><P
+>    Get the item where the current readpoint points to. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1403"
+></A
+>Preconditions</H4
+><P
+>    C.1 - Listreader is valid </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1405"
+></A
+>Postconditions</H4
+><P
+>    P.1 - Nothing is changed. 
+    P.2 - Current element is returned. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1407"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1409"
+></A
+>function List_End</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function List_End (  
+      Reader : in List_Reader_Handle ) return Boolean; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1412"
+></A
+>Description</H4
+><P
+>    Check for list end </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1415"
+></A
+>Preconditions</H4
+><P
+>    C.1 - Listreader is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1418"
+></A
+>Postconditions</H4
+><P
+>    P.1 - Returns true if end of list is reached, else false. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1420"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1260.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1422.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>UTIL.List</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1260.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Util.Lock_Table</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

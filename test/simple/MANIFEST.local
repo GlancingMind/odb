@@ -1,0 +1,5 @@
+MANIFEST.local
+Makefile
+main.adb
+person.adb
+person.ads

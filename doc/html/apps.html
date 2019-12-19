@@ -1,0 +1,196 @@
+<HTML
+><HEAD
+><TITLE
+>Building Applications</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="User Guide to ODB"
+HREF="using.html"><LINK
+REL="PREVIOUS"
+TITLE="User Guide to ODB"
+HREF="using.html"><LINK
+REL="NEXT"
+TITLE="Modelling Objects"
+HREF="model.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="using.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="model.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="APPLICATIONS"
+></A
+>Chapter 5. Building Applications</H1
+><P
+>Building an application using persistent objects requires to 
+   defined the objects to be handled as persistent objects and to add
+   some basic glue code to your application as shown below:
+
+   <DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN244"
+></A
+><P
+><B
+>Example 5-1. A minimal Application</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>with MyObject;
+with ODB.Persistent;        
+with ODB.Storage.File;             ......          
+use  ODB;
+procedure Main is 
+   O          : ODB.Reference ;
+   File_Store : File.Object;
+begin
+   File.Load(File_Store);
+
+   O := Lookup_Object( "First_Object" );
+   if O = null then     
+      O := new MyObject.Object;
+      Object_Name( O, "First_Object" );
+   
+      O.A := 1;
+   end if;
+   ........... do some thing ......
+
+   File.Save(File_Store);
+exception
+   when Others =&#62;
+      ,.......
+end Main;
+   </PRE
+></DIV
+>
+   In order to use persistency for certain objects you need to define
+   these objects in separate packages. This may be done completely by
+   using Ada 95 or by means of the object definition language (ODL) which
+   is an extension of Ada 95. In the example above, this has been done 
+   in the package MyObject which provides a persistent data type 
+   Object.</P
+><P
+>Upon start of the application, it will be checked if the object 
+   is already known in the persistency store with the name "First_Object".
+   If not, the object will be allocated by means of the new 
+   method.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="using.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="model.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>User Guide to ODB</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="using.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Modelling Objects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

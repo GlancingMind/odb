@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- $Id: gnu.xml,v 1.2 2003/10/12 17:16:42 merdmann Exp $ -->
+<Custom>
+   <Submenu>
+      <Title>GNU Build</Title>
+      <Menu_Item>
+         <Title>Rebuild</Title>
+	 <GPS_Action lang="shell">cd %pp</GPS_Action>
+         <Action>/bin/sh -c make</Action>
+      </Menu_Item>      
+      <Menu_Item>
+         <Title>Clean</Title>
+         <GPS_Action lang="shell">cd %pp</GPS_Action>
+         <Action>/bin/sh -c make clean</Action>
+      </Menu_Item>
+
+      <Menu_Item>
+         <Title>Configure</Title>
+         <GPS_Action lang="shell">cd %pp</GPS_Action>
+         <Action>/bin/sh -c ./configure</Action>
+      </Menu_Item>
+
+      <Menu_Item>
+         <Title>Compile</Title>
+         <GPS_Action lang="shell">cd %d</GPS_Action>
+         <Action>/bin/sh -c make</Action>
+      </Menu_Item>
+   </Submenu>
+</Custom>
+

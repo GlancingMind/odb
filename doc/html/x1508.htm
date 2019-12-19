@@ -1,0 +1,225 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Util.String_Map"
+HREF="c1498.htm"><LINK
+REL="PREVIOUS"
+TITLE="Util.String_Map"
+HREF="c1498.htm"><LINK
+REL="NEXT"
+TITLE="Util"
+HREF="c1527.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1498.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 27. Util.String_Map</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1527.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN1508"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1510"
+></A
+>Generic Package Parameter(s)</H2
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+   type Value_Type is private; 
+ </PRE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN1513"
+></A
+>procedure Put, function Get, function Is_Empty, function Key</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Put(  
+      This  : in out Object; 
+      Key   : in String; 
+      Value : in Value_Type );  
+ 
+ 
+   function Get( 
+      This : in Object; 
+      Key  : in String ) return Value_Type; 
+ 
+ 
+   function Is_Empty( 
+      This : in Object ) return Boolean; 
+ 
+   function Key( 
+      This : in Object; 
+      H    : in Natural ) return String; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1516"
+></A
+>Description</H4
+><P
+>    Add an Key/Value pair to the string map </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1519"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The key is not already in the table </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1522"
+></A
+>Postconditions</H4
+><P
+>    The Value is stored in the map and may be retrieved by means of the 
+    Get method. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN1525"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1498.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1527.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Util.String_Map</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1498.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Util</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

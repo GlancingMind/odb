@@ -1,0 +1,182 @@
+-------------------------------------------------------------------------------
+--                                                                           --
+--  Filename        : $Source: /cvsroot/gnade/odb/support/odb-collection.ods,v $
+--  Version         : $Revision: 1.1 $                                       --
+--  Description     : A collection of persistent objects                     --
+--  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>             --
+--  Created On      : 30-June-2003                                           --
+--  Last Modified By: $Author: merdmann $				     --
+--  Last Modified On: $Date: 2003/07/20 14:42:33 $                           --
+--  Status          : $State: Exp $                                          --
+--                                                                           --
+--  Copyright (C) 2003 Michael Erdmann                                       --
+--                                                                           --
+--  ODB is free software;  you can redistribute it  and/or modify it under   --
+--  terms of the  GNU General Public License as published  by the Free Soft- --
+--  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--  sion.  ODB is distributed in the hope that it will be useful, but WITH-  --
+--  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--  for  more details.  You should have  received  a copy of the GNU General --
+--  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+--  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+--  MA 02111-1307, USA.                                                      --
+--                                                                           --
+--  As a special exception,  if other files  instantiate  generics from this --
+--  unit, or you link  this unit with other files  to produce an executable, --
+--  this  unit  does not  by itself cause  the resulting  executable  to  be --
+--  covered  by the  GNU  General  Public  License.  This exception does not --
+--  however invalidate  any other reasons why  the executable file  might be --
+--  covered by the  GNU Public License.                                      --
+--                                                                           --
+--  Functional Description                                                   --
+--  ======================                                                   --
+--  This package provides a collection object. A collection object is a      --
+--  persistent object which allows to store references to other persistent   --
+--  objects.								     --
+--  Objects are stored in the sequence they have been added, except that the --
+--  calling application provides a position index.			     --
+--  The contents of a collection may be accessed by means of a so called     --
+--  Element_Array which is provided by the function Contents.                --
+--                                                                           --
+--  Restrictions                                                             --
+--  ============                                                             --
+--                                                                           --
+--  References                                                               --
+--  ==========                                                               --
+--  None                                                                     --
+--                                                                           --
+-------------------------------------------------------------------------------
+with Ada.Strings.Unbounded;			use Ada.Strings.Unbounded;
+with Ada.Streams.Stream_IO;                     use Ada.Streams.Stream_IO;
+with Ada.Streams;                               use Ada.Streams;
+use  Ada;
+
+with ODB.Persistent;				use ODB.Persistent;
+with ODB.Storage_Header;			use ODB.Storage_Header;
+use  ODB;
+
+package ODB.Collection is
+
+   -- this type represents the persistent collection.
+   type Object is persistent private;
+
+   -- This type is used to obtain the contents of the collection
+   type Element_Array_Type is array( Natural range <> ) of Reference;
+   type Element_Array_Access is access Element_Array_Type ;
+
+   -- the following two procedures should be ignored, since they
+   -- are required internaly to read and write references in the 
+   -- object store. They should never be called directly, only 
+   -- by means of the Input, Output attributes.
+   procedure Write_Element_Array_Access(
+      Stream : access Root_Stream_Type'Class;
+      Item   : in Element_Array_Access );
+   for Element_Array_Access'Output use Write_Element_Array_Access;
+
+   function Read_Element_Array_Access(
+      Stream : access Root_Stream_Type'Class ) return Element_Array_Access;
+   for Element_Array_Access'Input use Read_Element_Array_Access;
+
+   ---------------------------------------------------------------------------
+   -- Description: 
+   --    Create a collection with a given name
+   -- Preconditions:
+   --    None.
+   -- Postconditions:
+   --    C.1 - A persistent object is created which allowes to store
+   --          other persistent objects in it.
+   -- Exceptions:
+   --    None
+   -- Notes:
+   ---------------------------------------------------------------------------  
+   function Create( 
+      Name : in String ) return Reference;
+
+   ---------------------------------------------------------------------------
+   -- Description: 
+   --    Desctroy the collection
+   -- Preconditions:
+   --    P.1 - The reference point to a collection.
+   -- Postconditions:
+   --    C.1 - All resources are released
+   --    C.2 - The reference to the collection is set to null.
+   -- Exceptions:
+   --    Invalid_Object - P.1 violated
+   -- Notes:
+   ---------------------------------------------------------------------------  
+   procedure Destroy(
+      This : in out Reference );
+
+   ---------------------------------------------------------------------------
+   -- Description: 
+   --    Add an element to the collection
+   -- Preconditions:
+   --    P.1 - This points to a collection object
+   -- Postconditions:
+   --    C.1 - The reference of Item is added to the collection
+   -- Exceptions:
+   --    Invalid_Object - P.1 violated
+   -- Notes:
+   ---------------------------------------------------------------------------  
+   procedure Add( 
+      This     : in Reference;
+      Item     : in Reference;
+      Position : in Natural := 0 );
+
+   ---------------------------------------------------------------------------
+   -- Description: 
+   --    Check if the object is in the container
+   -- Preconditions:
+   --    P.1 - This points to a collection object
+   -- Postconditions:
+   --    C.1 - return true if the reference is in the collection
+   -- Exceptions:
+   --    Invalid_Object - P.1 violated
+   -- Notes:
+   ---------------------------------------------------------------------------  
+   function Contains(
+      This    : in Reference;
+      Item    : in Reference ) return Boolean;
+
+   ---------------------------------------------------------------------------
+   -- Description: 
+   --    Return the contents of the collection.
+   -- Preconditions:
+   -- Postconditions:
+   --    C.1 - The function returns a pointer to an array of all objects
+   -- Exceptions:
+   --    Invalid_Object - P.1 violated
+   -- Notes:
+   --    The pointer returned with C.1 has to be returned using Free after
+   --    it is not needed any more.
+   ---------------------------------------------------------------------------  
+   function Contents(
+      This : in Reference ) return Element_Array_Access ;
+
+   ---------------------------------------------------------------------------
+   -- Description: 
+   --    Free the array of collection elements.
+   -- Preconditions:
+   --    P.1 - A valid Element_Array_Access
+   -- Postconditions:
+   --    C.1 - The storage of the array is given back.
+   --    I.1 - The referenced objects are not touched.
+   -- Exceptions:
+   --    Any - P.1 violated.
+   -- Notes:
+   ---------------------------------------------------------------------------  
+   procedure Free( 
+      Elements : in out Element_Array_Access );
+
+private
+   ------------
+   -- Object --
+   ------------
+   type Object is persistent record
+         Name     : attribute Unbounded_String := Null_Unbounded_String;
+	 Used     : attribute Natural := 0;
+	 Elements : attribute Element_Array_Access := null; 
+      end record ;
+   
+end ODB.Collection;

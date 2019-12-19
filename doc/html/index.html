@@ -1,0 +1,817 @@
+<HTML
+><HEAD
+><TITLE
+>User's Guide</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="NEXT"
+TITLE="Preface"
+HREF="perface.html"></HEAD
+><BODY
+CLASS="BOOK"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="ODB"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="AEN2"
+></A
+>User's Guide</H1
+><H2
+CLASS="SUBTITLE"
+>A Framework for Object Persistency for GNAT</H2
+><H2
+CLASS="SUBTITLE"
+>Version 0.6.1</H2
+><H2
+CLASS="SUBTITLE"
+>Document Revision $Revision: 1.16 $</H2
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN9"
+></A
+>Michael Erdmann</H3
+><H4
+CLASS="EDITEDBY"
+>Edited by</H4
+><H3
+CLASS="EDITOR"
+>Michael Erdmann</H3
+><P
+CLASS="COPYRIGHT"
+>Copyright &copy; 2003 M. Erdmann</P
+><DIV
+CLASS="LEGALNOTICE"
+><A
+NAME="AEN30"
+></A
+><P
+></P
+><A
+NAME="AEN31"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+>      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.1
+      or any later version published by the Free Software Foundation;
+      with no Invariant Sections, with the Front-Cover Texts being 
+      "A Object Persistency for Ada 95".
+      A copy of the license is included in the section entitled "GNU
+      Free Documentation License".
+   </P
+></BLOCKQUOTE
+><P
+></P
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="perface.html"
+>Preface</A
+></DT
+><DT
+>I. <A
+HREF="part1.html"
+>Introduction</A
+></DT
+><DD
+><DL
+><DT
+>1. <A
+HREF="overview.html"
+>Overview</A
+></DT
+><DT
+>2. <A
+HREF="getstarted.html"
+>Getting started</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="getstarted.html#AEN85"
+>Installation on Unix like systems</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="basics.html"
+>ODB Basics</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="basics.html#AEN113"
+>Object Model of ODB</A
+></DT
+><DT
+><A
+HREF="x126.htm"
+>Object Life Cycle</A
+></DT
+><DT
+><A
+HREF="x179.htm"
+>ODB API</A
+></DT
+><DT
+><A
+HREF="x182.htm"
+>Connection with the storage media</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="impl.html"
+>Implemenation</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="impl.html#AEN199"
+>Package Structure</A
+></DT
+><DT
+><A
+HREF="x226.htm"
+>Classes</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>II. <A
+HREF="using.html"
+>User Guide to ODB</A
+></DT
+><DD
+><DL
+><DT
+>5. <A
+HREF="apps.html"
+>Building Applications</A
+></DT
+><DT
+>6. <A
+HREF="model.html"
+>Modelling Objects</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="model.html#AEN255"
+>Definition of persistent Objects</A
+></DT
+><DT
+><A
+HREF="x270.htm"
+>Deriving persistent objects</A
+></DT
+></DL
+></DD
+><DT
+>7. <A
+HREF="tools.html"
+>ODB Tools</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="tools.html#AEN282"
+>ODL Translator</A
+></DT
+><DT
+><A
+HREF="x307.htm"
+>Object Inspector</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>III. <A
+HREF="p322.htm"
+>API References</A
+></DT
+><DD
+><DL
+><DT
+>8. <A
+HREF="c324.htm"
+>ODB.Attribute_Dictionary</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c324.htm#AEN326"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x335.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>9. <A
+HREF="c340.htm"
+>ODB.Classes</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c340.htm#AEN342"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x365.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>10. <A
+HREF="c434.htm"
+>ODB.Database</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c434.htm#AEN436"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x447.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>11. <A
+HREF="c458.htm"
+>ODB.Entity</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c458.htm#AEN460"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x469.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>12. <A
+HREF="c530.htm"
+>ODB.Memory_Stream</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c530.htm#AEN532"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x548.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>13. <A
+HREF="c610.htm"
+>ODB.Object_Loader</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c610.htm#AEN612"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x622.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>14. <A
+HREF="c633.htm"
+>ODB.Object_Writer</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c633.htm#AEN635"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x643.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>15. <A
+HREF="c648.htm"
+>ODB.Persistent</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c648.htm#AEN650"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x661.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>16. <A
+HREF="c811.htm"
+>ODB.Storage.File</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c811.htm#AEN813"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x830.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>17. <A
+HREF="c875.htm"
+>ODB.Storage</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c875.htm#AEN877"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x885.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>18. <A
+HREF="c905.htm"
+>ODB.Storage_Header</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c905.htm#AEN907"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x934.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>19. <A
+HREF="c988.htm"
+>ODB.Transaction</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c988.htm#AEN990"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1002.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>20. <A
+HREF="c1088.htm"
+>ODB.XML</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1088.htm#AEN1090"
+>Overview</A
+></DT
+></DL
+></DD
+><DT
+>21. <A
+HREF="c1102.htm"
+>ODB</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1102.htm#AEN1104"
+>Overview</A
+></DT
+></DL
+></DD
+><DT
+>22. <A
+HREF="c1114.htm"
+>Util.Hash_Table</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1114.htm#AEN1116"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1131.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>23. <A
+HREF="c1260.htm"
+>UTIL.List</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1260.htm#AEN1262"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1271.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>24. <A
+HREF="c1422.htm"
+>Util.Lock_Table</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1422.htm#AEN1424"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1434.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>25. <A
+HREF="c1462.htm"
+>UTIL.Stack</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1462.htm#AEN1464"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1472.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>26. <A
+HREF="c1480.htm"
+>Util.String_Array</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1480.htm#AEN1482"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1493.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>27. <A
+HREF="c1498.htm"
+>Util.String_Map</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1498.htm#AEN1500"
+>Overview</A
+></DT
+><DT
+><A
+HREF="x1508.htm"
+>API Reference</A
+></DT
+></DL
+></DD
+><DT
+>28. <A
+HREF="c1527.htm"
+>Util</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1527.htm#AEN1529"
+>Overview</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>A. <A
+HREF="a1540.htm"
+>Frequently asked questions</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="a1540.htm#AEN1543"
+>Q: How do i update</A
+></DT
+></DL
+></DD
+><DT
+>B. <A
+HREF="a1550.htm"
+>GNU Free Documentation License</A
+></DT
+><DD
+><DL
+><DT
+>0. <A
+HREF="a1550.htm#AEN1555"
+>PREAMBLE</A
+></DT
+><DT
+>1. <A
+HREF="x1560.htm"
+>APPLICABILITY AND DEFINITIONS</A
+></DT
+><DT
+>2. <A
+HREF="x1570.htm"
+>VERBATIM COPYING</A
+></DT
+><DT
+>3. <A
+HREF="x1574.htm"
+>COPYING IN QUANTITY</A
+></DT
+><DT
+>4. <A
+HREF="x1580.htm"
+>MODIFICATIONS</A
+></DT
+><DT
+>5. <A
+HREF="x1616.htm"
+>COMBINING DOCUMENTS</A
+></DT
+><DT
+>6. <A
+HREF="x1621.htm"
+>COLLECTIONS OF DOCUMENTS</A
+></DT
+><DT
+>7. <A
+HREF="x1625.htm"
+>AGGREGATION WITH INDEPENDENT WORKS</A
+></DT
+><DT
+>8. <A
+HREF="x1629.htm"
+>TRANSLATION</A
+></DT
+><DT
+>9. <A
+HREF="x1632.htm"
+>TERMINATION</A
+></DT
+><DT
+>10. <A
+HREF="x1635.htm"
+>FUTURE REVISIONS OF THIS LICENSE</A
+></DT
+></DL
+></DD
+><DT
+>C. <A
+HREF="a1640.htm"
+>GNU Public License (GPL) Version 2</A
+></DT
+><DT
+><A
+HREF="z1644.htm"
+>Colophon</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Tables</B
+></DT
+><DT
+>7-1. <A
+HREF="tools.html#AEN291"
+>Options</A
+></DT
+><DT
+>7-2. <A
+HREF="x307.htm#AEN315"
+>Options</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>5-1. <A
+HREF="apps.html#AEN244"
+>A minimal Application</A
+></DT
+><DT
+>6-1. <A
+HREF="model.html#AEN252"
+>A minimal Object Model file</A
+></DT
+><DT
+>6-2. <A
+HREF="model.html#AEN261"
+>Syntax: persistent object definition</A
+></DT
+><DT
+>6-3. <A
+HREF="model.html#AEN267"
+>Syntax: Attribute Definition</A
+></DT
+><DT
+>6-4. <A
+HREF="x270.htm#AEN276"
+>Syntax: ISA Clause</A
+></DT
+><DT
+>A-1. <A
+HREF="a1540.htm#AEN1547"
+>Updating ABE</A
+></DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="perface.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Preface</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

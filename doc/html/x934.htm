@@ -1,0 +1,359 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB.Storage_Header"
+HREF="c905.htm"><LINK
+REL="PREVIOUS"
+TITLE="ODB.Storage_Header"
+HREF="c905.htm"><LINK
+REL="NEXT"
+TITLE="ODB.Transaction"
+HREF="c988.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c905.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. ODB.Storage_Header</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c988.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN934"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN936"
+></A
+>procedure Register_Attribute, procedure Register_Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Register_Attribute(  
+      This   : in out Object; 
+      Name   : in Unbounded_String; 
+      Offset : in Natural ); 
+ 
+   procedure Register_Attribute( 
+      This   : in out Object; 
+      Id     : in Natural; 
+      Offset : in Natural; 
+      Cls    : in Tag ); 
+ </PRE
+><PRE
+CLASS="PROGRAMLISTING"
+>   Unknown_Attribute : exception; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN940"
+></A
+>Description</H4
+><P
+>    Resgister the attrbute based on the field id as it is registered in 
+    the class it self. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN943"
+></A
+>Preconditions</H4
+><P
+>   C.1 - Object is valid. </P
+><P
+>   C.2 - Tag references an object derived from ODB.Persistent.Object </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN946"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN948"
+></A
+>function Lookup_Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Lookup_Attribute(  
+      This   : in Object; 
+      Name   : in String ) return Natural; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN951"
+></A
+>Description</H4
+><P
+>    Return the offset for the named attribute in the header. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN953"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The attribute Name has been registered via Register_Attribute </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN955"
+></A
+>Postconditions</H4
+><P
+>    P.1 - Returns offset </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN958"
+></A
+>Exceptions</H4
+><P
+>    Unknown_Attribute : C.1 violated </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN960"
+></A
+>function Attributes</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Attributes(  
+      This   : in Object ) return String_Array.Handle; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN963"
+></A
+>Description</H4
+><P
+>   Return all attribute names which are registered in the header. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN965"
+></A
+>Preconditions</H4
+><P
+>   C.1 - Object is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN968"
+></A
+>Postconditions</H4
+><P
+>   P.1 - Returns null if the header is empty 
+   P.2 - Returns the point to a string array. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN970"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+><P
+></P
+><P
+>   The string array has to be destroyed by means of the 
+   operation Free in Util.String_Array. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN975"
+></A
+>procedure Clear, function Class_Name, procedure Class_Name</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Clear(  
+      This   : in out Object ); 
+ 
+   function Class_Name( 
+      This   : in Object ) return String ; 
+ 
+   procedure Class_Name( 
+      This   : in out Object; 
+      Value  : in String ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN978"
+></A
+>Description</H4
+><P
+>    Clear the header. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN981"
+></A
+>Preconditions</H4
+><P
+>    C.1 - Object is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN984"
+></A
+>Postconditions</H4
+><P
+>    P.1 - All attributes are removed from the header. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN986"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c905.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c988.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Storage_Header</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c905.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.Transaction</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

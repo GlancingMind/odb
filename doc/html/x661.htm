@@ -1,0 +1,723 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB.Persistent"
+HREF="c648.htm"><LINK
+REL="PREVIOUS"
+TITLE="ODB.Persistent"
+HREF="c648.htm"><LINK
+REL="NEXT"
+TITLE="ODB.Storage.File"
+HREF="c811.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c648.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. ODB.Persistent</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c811.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN661"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN663"
+></A
+>procedure Write_Reference, function Read_Reference</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Write_Reference(  
+      Stream : access Root_Stream_Type'Class; 
+      Item   : in Reference ); 
+   for Reference'Output use Write_Reference; 
+ 
+   function Read_Reference( 
+      Stream : access Root_Stream_Type'Class ) return Reference; 
+   for Reference'Input use Read_Reference; 
+ </PRE
+><P
+> this type is the root type of all persistent objects 
+ use this as references to persistent types </P
+><P
+> the following two procedures should be ignored, since they 
+ are required internaly to read and write references in the 
+ object store. They should never be called directly, only 
+ by means of the Input, Output attributes. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN669"
+></A
+>procedure Serialize</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Serialize(  
+      Item   : in out Object;  
+      Header : in out Storage_Header.Object; 
+      S      : in Stream_Access ) is abstract; 
+ </PRE
+><P
+> This execption indicates that an object reference cannot be 
+ resolved. </P
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>   Unresolved_Reference : exception ; 
+   Unknown_Attribute    : exception ; </PRE
+><P
+> Maximum number of objects in the Persistent pool. </P
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>   Max_Nbr_Of_Objects   : constant Natural := 32_000; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN678"
+></A
+>Description</H4
+><P
+>    This procedure writes out the object into the stream provided by 
+    the Persistency module. Each field of the object may be written 
+    out by means of the Output attribute. References to other objects 
+    are automatically expanded into a logical representation which 
+    can be read in later if the Method Reference'Output is used. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN680"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN683"
+></A
+>Postconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN686"
+></A
+>Exceptions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN689"
+></A
+>Notes</H4
+><P
+>    Please note, that the application delveloper has to provide this 
+    implemenation, but it should never be called somewhere in the 
+    application. </P
+><P
+>    This procedure is only called by the persistency manager and should 
+    be placed in the private section. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN693"
+></A
+>procedure Deserialize</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Deserialize(  
+      Item   : in out Object;  
+      Header : in out Storage_Header.Object; 
+      S      : in Stream_Access ) is abstract; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN696"
+></A
+>Description</H4
+><P
+>    Read in all field of the given object. This procedure is called 
+    by the persistency manager when loading the objects from an external 
+    file. </P
+><P
+>    The procedure may read each field of the object by means of the 
+    Input attribute except for references to other instances in the 
+    object space. These entires have to be loaded by means of the 
+    Reference'Input method. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN700"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN703"
+></A
+>Postconditions</H4
+><P
+>    It is assumed, that all fields have been read. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN706"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+><P
+></P
+><P
+>    Please ensure, that the number of field written is identical to the 
+    number of fields read in. If not the file becomes unreadable. 
+    This procedure is only called by the persistency manager and should 
+    be placed in the private section. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN711"
+></A
+>function Factory</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Factory return Reference is abstract;  
+    </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN714"
+></A
+>Description</H4
+><P
+>    The factory funtion creates a new object of the implenting class. 
+    Under normal circumstances this will be an new Object operation. This 
+    function will be registered together with the External_Tag of the 
+    implementation in order to allow the persistency manager to create 
+    instances when reading in the data from a file. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN717"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN720"
+></A
+>Postconditions</H4
+><P
+>    The function returns a reference to the newly created object </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN722"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+><P
+></P
+><P
+>    Please be aware, that any initialization done in this procedure will 
+    be overwritten later when the actual object is restored. </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN726"
+></A
+>function Object_Id</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Object_Id(   
+      Ref   : in Reference ) return Natural; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN729"
+></A
+>Description</H4
+><P
+>    Returns the object identifier </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN732"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN735"
+></A
+>Postconditions</H4
+><P
+>    Returns the object identifier which is a Natural number. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN737"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN739"
+></A
+>procedure Name_Object</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Name_Object(  
+      Ref  : in Reference ; 
+      Name : in String );       
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN742"
+></A
+>Description</H4
+><P
+>    Assign a unique name to the object </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN744"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The Reference has to be valid 
+    C.2 - Name has to be unique. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN746"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+><P
+></P
+><P
+>    Invalid_Object - violation of C.1 
+    Duplicate_Name - violation of C.2 </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN750"
+></A
+>function Object_Name</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Object_Name(  
+      Ref  : in Reference ) return String; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN753"
+></A
+>Description</H4
+><P
+>    Ask for the object name </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN756"
+></A
+>Preconditions</H4
+><P
+>    P.1 - Reference is valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN759"
+></A
+>Postconditions</H4
+><P
+>    Returns a string with the name of the object </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN761"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN763"
+></A
+>function Lookup_Object</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Lookup_Object(  
+      Name : in String ) return Reference; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN766"
+></A
+>Description</H4
+><P
+>    Lookup the object from the object table. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN768"
+></A
+>Preconditions</H4
+><P
+> Postconditions: </P
+><P
+></P
+><P
+>    Returns the reference if the object does exist. 
+    Returns null if the object does not exist. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN772"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN774"
+></A
+>function Is_Persistent</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Is_Persistent(  
+      Ref   : in Reference ) return Boolean; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN777"
+></A
+>Description</H4
+><P
+>    Check if the referenced object is persistent </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN779"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The Reference has to be valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN782"
+></A
+>Postconditions</H4
+><P
+>    - The function returns true, if the object is persistent. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN784"
+></A
+>Exceptions</H4
+><P
+>    Invalid_Object - violation of C.1 </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN786"
+></A
+>function Get_Reference</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Get_Reference(   
+      Id    : in Natural; 
+      Force : Boolean := False ) return Reference; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN789"
+></A
+>Description</H4
+><P
+>    Return the reference to an object from the object identifier </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN791"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN794"
+></A
+>Postconditions</H4
+><P
+>    Returns the reference to the object if it exists 
+    Returns null, if the object does not exist. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN796"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN798"
+></A
+>function Nbr_Of_Objects</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Nbr_Of_Objects return Natural;  
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN801"
+></A
+>Description</H4
+><P
+>    Number of objects in the persistent pool </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN804"
+></A
+>Preconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN807"
+></A
+>Postconditions</H4
+><P
+>    - Returns the number of already stored objects in the pool. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN809"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c648.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c811.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Persistent</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c648.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.Storage.File</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

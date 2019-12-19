@@ -1,0 +1,413 @@
+#!/bin/sh 
+## ----------------------------------------------------------------------------
+##                                                                           --
+##  Filename        : $Source: /cvsroot/gnade/odb/base/configure.in,v $
+##  Description     : ABE Main Configuration Script
+##  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>             --
+##  Created On      : 20-06-2003                                             --
+##  Last Modified By: $Author: merdmann $				     --
+##  Last Modified On: $Date: 2003/10/12 19:43:11 $                           --
+##  Status          : $State: Exp $                                          --
+##                                                                           --
+##  Copyright (C) 2003 Michael Erdmann                                       --
+##                                                                           --
+##  ABE is copyrighted by the persons and institutions enumerated in the     --
+##  AUTHORS file. This file is located in the root directory of the          --
+##  ABE distribution.                                                        --
+##                                                                           --
+##  ABE is free software;  you can redistribute it  and/or modify it under   --
+##  terms of the  GNU General Public License as published  by the Free Soft- --
+##  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+##  sion.  ABE is distributed in the hope that it will be useful, but WITH-  --
+##  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+##  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+##  for  more details.  You should have  received  a copy of the GNU General --
+##  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+##  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+##  MA 02111-1307, USA.                                                      --
+##                                                                           --
+##  As a special exception,  if other files  instantiate  generics from      --
+##  ABE Ada units, or you link ABE Ada units or libraries with other         --
+##  files  to produce an executable, these  units or libraries do not by     --
+##  itself cause the resulting  executable  to  be covered  by the  GNU      --
+##  General  Public  License.  This exception does not however invalidate    --
+##  any other reasons why  the executable file  might be covered by the      --
+##  GNU Public License.                                                      --
+##                                                                           --
+## ----------------------------------------------------------------------------
+##                                                          
+AC_INIT(../VERSION)
+AC_CONFIG_AUX_DIR( ../autoconf $install_dir )
+AC_PROG_INSTALL
+AC_CANONICAL_SYSTEM
+AC_REVISION($Revision: 1.8 $)
+##
+## Get the package version
+##
+. ../VERSION
+CNF_VERSION=$MAJOR.$MINOR.$PATCHLEVEL
+
+AC_SUBST(CNF_VERSION)
+AC_SUBST(CNF_TITLE)
+AC_SUBST(CNF_PACKAGE)
+
+# ----------------------------------------------------------------------
+# AC_CHECK_ADAPKG( PKGNAME, pathname [,action]  )
+#
+# This macros attampts to locate ada package on a linux system
+# by seaching in the sub directories ./ and ./include specified 
+# in: 
+#
+# 1) ada_site_path from  the site configuration
+# 2) site_libdir/ada
+#
+# As a side effect this macro returns in
+# -----------------------------------------------------------------------
+AC_DEFUN([AC_CHECK_ADAPKG], [
+   AC_MSG_CHECKING([for Ada package $1])
+   ac_ada_path=""
+   echo "with $1; procedure test is begin null; end test; " > test.adb
+
+   for ac_dir in "./" $site_ada_path/$1 ; do
+      $adamake -c  -I$ac_dir -I$ac_dir/include test.adb  2>/dev/null >/dev/null 
+      if test "$?" = "0" ; then
+	 ac_ada_path=$ac_dir
+	 break
+      fi 
+   done
+   rm -rf test.adb
+   if test "x$ac_ada_path" = "x"; then
+      AC_ERROR([not found])
+   else
+      if test $ac_dir = "./" ; then
+	 AC_MSG_RESULT([package in default path of your compiler])
+      else
+	 AC_MSG_RESULT([found ($ac_ada_path)])
+	 $2=$ac_ada_path ; export $2
+      fi
+      $3
+   fi
+])
+
+AC_DEFUN([abe_include], [
+   AC_MSG_CHECKING([for local include file]
+   . $1
+])
+
+#
+#  $1 package name
+#  $2 CFLAGS
+#  $3 LFLAGS
+#  $4 Any additional action
+#   
+#  This macro tries to figure out how the package is to be configure by
+#  means of the following logic:
+#
+#  1. if pkg-config available check the package name. If available return
+#     CFLAGS and LDFLAGS and exit.
+#  2. if <pkgname>-config available run it, assign the result and exist.
+#  3. Guess the include path for the sources
+#  4. Guess the location of the libraries. The name of the libraries
+#     is assumed to be 
+#
+AC_DEFUN([AC_CONF_ADAPKG],[
+   ac_cflags=""
+   ac_libs=""
+   ac_cnf_found="n"
+   ac_adaconfig=""
+
+   AC_MSG_CHECKING([for Ada package $1])   
+
+   for ac_cnf in $pkgconfig $1-config ; do
+      case $ac_cnf in
+	 pkg-config) 
+	    $pkgconfig $1
+	    if test "$?" = "0" ; then
+	       ac_cnf_found="y"
+	       ac_cflags=`$ac_cnf --cflags $1` 
+	       ac_libs=`$ac_cnf --libs $1`
+	       break;
+	    fi
+	    ;;
+	 $1-config)
+	    which $1-config >/dev/null 2>/dev/null
+	    if test "$?" = "0" ; then
+	       ac_cnf_found="y"
+	       ac_cflags=`$ac_cnf  --cflags` 
+	       ac_libs=`$ac_cnf --libs`
+	       break;
+	    fi
+	    ;;
+	 *)
+	    ac_cnf_found="n"         
+	    ;;
+      esac 
+   done
+
+   if test "$ac_cnf_found" = "n" ; then
+      ac_include_path=""
+      rm -rf test_$1.*
+      echo "with $1; procedure test_$1 is begin null; end test_$1; " > test_$1.adb
+
+      for ac_dir in $$1_source_path $site_ada_path/$1 /usr/lib/$1 /usr/local/$1/lib; do
+	 if test -d $ac_dir ; then
+	    if test -d $ac_dir/include; then
+	       ac_src="$ac_dir/include"
+	    else
+	       ac_src="$ac_dir"
+	    fi
+	    $adamake -c  -I$ac_src test_$1.adb 2>/dev/null
+	    if test "$?" = "0" ; then
+	       ac_cflags=" -I$ac_src"
+
+	       if test -d $ac_dir/lib; then
+		  ac_libs="$ac_libs -L $ac_dir/lib"
+	       else
+		  ac_libs="$ac_libs -L $ac_dir"
+	       fi
+	       ac_cnf_found="y"
+	       break
+	    fi
+	 fi
+      done
+
+      ac_libs="$ac_libs $$1_libs"
+      rm -rf test_$1.*
+   fi
+
+   if test "$ac_cnf_found" = "y" ; then
+      $2="$$2 $ac_cflags $$1_aux_source"
+      $3="$$3 $ac_libs $$1_aux_object"
+
+      $4   
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([not found])
+   fi
+])
+
+#################################################################################
+##                  DEFINE THE SYSTEM (TARGET) ENVIRONMENT                     ##
+##                                                                             ##
+#################################################################################
+
+
+## ----------------------------------------------------------------------
+## Configure the location of the directory where install-sh is located. 
+## ----------------------------------------------------------------------    
+AC_ARG_WITH(install-dir,
+[ --with-install-dir=<path>  Set the location of the install-sh script],
+[inst_root=$withval],
+[inst_root=/usr/local/odb])
+
+##
+## Try to locate pkgconfig 
+##
+pkgconfig=""
+AC_CHECK_PROG(pkgconfig, pkg-config, pkg-config, "")
+AC_SUBST(pkgconfig)
+
+##
+## Setup some defaults for the site specific parameters which are 
+## stored in /etc/config.site
+##
+if test "x$site_ada_path" = "x" ; then
+   site_ada_path="/usr/lib/ada";
+fi;
+
+
+## ----------------------------------------------------------------------
+## check for docbook installation and insert the document
+## targets
+## ----------------------------------------------------------------------
+DOCBOOK=""
+SGML_BASE=""
+documents=""
+used_spellchecker=""
+
+AC_CHECK_PROGS(docbook,[openjade jade], no)
+if test "$docbook" \!= "no" ; then
+
+   AC_MSG_CHECKING([for SGML base directory])
+   for i in /usr/lib /usr/share ; do
+      if test -d $i/sgml  ; then
+	 SGML_BASE="$i/sgml"
+	 break
+      fi
+   done 
+   if test "x$SGML_BASE" = "x"  ; then
+      AC_MSG_RESULT([not found])
+   else
+      AC_MSG_RESULT([found $SGML_BASE])
+   fi
+fi
+AC_SUBST(SGML_BASE)
+AC_SUBST(docbook)
+
+#################################################################################
+##                     GUESS THE ADA 95 COMPILER                               ##
+##                                                                             ##
+#################################################################################
+
+debugopt="-O2 -gnatn"
+adaprepopts=""
+
+AC_ARG_ENABLE(debug,[Enable debugging],
+   [ debugopt="-g -gnato"; 
+     adaprepopts="$adaprepopts -DDEBUG=True"]
+)       
+AC_ARG_ENABLE(assert,[Enable assertation], [debugopt="$debugopt -gnata"])
+
+AC_SUBST(adaprepopts)
+AC_SUBST(debugopt)
+
+## Check for different versions of the ada 95 compiler
+adacomp=gcc
+
+AC_CHECK_PROGS(adacomp,[ gcc gnatgcc ], no)
+AC_CHECK_PROG(adamake, gnatmake, gnatmake, no) 
+AC_CHECK_PROG(adaprep, gnatprep, gnatprep, no) 
+AC_CHECK_PROGS(adahtml, gnathtml.pl, "") 
+
+for i in $adacomp $adamake $adaprep ; do
+   if test "$i" = "no"; then
+     AC_MSG_ERROR([Ada 95 compiler component is missing])
+   fi
+done
+
+AC_SUBST(gnatpath)
+gnatpath=""
+if test "$adacomp" = "gcc"  ; then
+   AC_MSG_CHECKING([for correct gnat path ..] )
+   echo "procedure test is begin null; end test; " > test.adb
+
+   for i in /usr/gnat/bin /usr/local/bin /usr/bin; do
+      if test -x $i/gcc  ; then
+	 rm -rf test.ali test.o
+	 $i/gcc -c test.adb 2> /dev/null
+	 if test -e test.ali  ; then
+	    gnatpath=$i
+	    AC_MSG_RESULT([ $gnatpath ])
+	    break
+	 fi
+      fi
+   done;
+
+   rm -f test.adb test.o test.ali
+fi
+
+PATH=$gnatpath:$PATH; export PATH
+
+adapath=$gnatpath
+
+AC_SUBST(adapath)
+AC_SUBST(adacomp)
+
+##
+##  check for different ides
+##
+adaide=""
+AC_MSG_CHECKING([for ACT Ada IDE GPS])   
+if test -f $gnatpath/gps ; then
+   adaide="gps"
+fi
+AC_MSG_RESULT([ $adaide ])
+
+AC_SUBST(adaide)
+
+#################################################################################
+##                CHECK FOR REQUIERED SUPPORT PACKAGES                         ##
+##                                                                             ##
+#################################################################################
+LDFLAGS=""
+CFLAGS=""
+
+## build the gnat options list from the site_ada_path
+
+
+ADA_LDFLAGS=""
+ADA_CFLAGS=""
+for i in $site_ada_path ; do
+   ADA_CFLAGS="$ADA_CFLAGS -I$i"
+   ADA_LDFLAGS="$ADA_LDFLAGS -L$i"
+done
+
+m4_sinclude([../util/configure.local])
+m4_sinclude([../src/configure.local])
+m4_sinclude([../samples/configure.local])
+m4_sinclude([../apps/configure.local])
+m4_sinclude([../configure.local])
+
+AC_SUBST(ADA_LDFLAGS)
+AC_SUBST(ADA_CFLAGS)
+
+AC_CHECK_PROG(libtool, libtool, libtool, no) 
+if test "$libtool" = "no" ; then
+   AC_MSG_ERROR([libtool utility is missing])
+fi
+
+
+##
+## 
+##
+if test "x$site_bindir" = "x" ; then
+   site_bindir=$inst_root/bin
+fi
+
+if test "x$site_libdir" = "x" ; then
+   site_libdir=$inst_root/lib
+fi
+
+if test "x$site_incdir" = "x" ; then
+   site_incdir=$inst_root/include
+fi
+
+if test "x$site_docdir" = "x" ; then
+   site_docdir=$inst_root/doc
+fi
+
+if test "x$site_shared" = "x" ; then
+   site_shared=$inst_root/shared
+fi
+
+AC_SUBST(site_libdir)
+AC_SUBST(site_bindir)
+AC_SUBST(site_incdir)
+AC_SUBST(site_docdir)
+AC_SUBST(site_shared)
+
+#################################################################################
+##           G E N E R A T E  C U S T O M I Z E D    F I L E S                 ##
+##                                                                             ##
+#################################################################################
+
+AC_OUTPUT( [ 
+   ../make.conf
+   ../Makefile
+   ../bin/vars.sh
+   ../bin/docbuild.sh
+   ../bin/adacompiler.sh
+   ../bin/domanifest.sh
+   ../bin/makelib.sh
+   ../bin/install-odb.sh
+   ../bin/odb-config
+   ../pkg-config/apf.pc
+   ../base/MANIFEST
+   ])
+
+cat <<EOF
+-----------------------------------------------------
+
+Compiler Flags    : $ADA_CFLAGS
+Linker Flags      : $ADA_LDFLAGS
+
+
+Installation directories
+    Binaries      : $site_bindir
+    Libraries     : $site_libdir
+    Units         : $site_incdir
+    Documents     : $site_docdir
+    Shared Obj.   : $site_shared
+------------------------------------------------------
+EOF
+

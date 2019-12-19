@@ -1,0 +1,151 @@
+-------------------------------------------------------------------------------
+--                                                                           --
+--  Filename        : $Source: /cvsroot/gnade/odb/samples/dungon/player.odb,v $
+--  Version         : $Revision: 1.5 $                                       --
+--  Description     : ODB Database connection                                --
+--  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>             --
+--  Created On      : 21-June-2003                                           --
+--  Last Modified By: $Author: merdmann $				     --
+--  Last Modified On: $Date: 2003/07/05 13:59:16 $                           --
+--  Status          : $State: Exp $                                          --
+--                                                                           --
+--  Copyright (C) 2003 Michael Erdmann                                       --
+--                                                                           --
+--  ODB is free software;  you can redistribute it  and/or modify it under   --
+--  terms of the  GNU General Public License as published  by the Free Soft- --
+--  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--  sion.  ODB is distributed in the hope that it will be useful, but WITH-  --
+--  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--  for  more details.  You should have  received  a copy of the GNU General --
+--  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+--  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+--  MA 02111-1307, USA.                                                      --
+--                                                                           --
+--  As a special exception,  if other files  instantiate  generics from this --
+--  unit, or you link  this unit with other files  to produce an executable, --
+--  this  unit  does not  by itself cause  the resulting  executable  to  be --
+--  covered  by the  GNU  General  Public  License.  This exception does not --
+--  however invalidate  any other reasons why  the executable file  might be --
+--  covered by the  GNU Public License.                                      --
+--                                                                           --
+--  Functional Description                                                   --
+--  ======================                                                   --
+--  This object represents the connection to a database.                     --
+--                                                                           --
+--  Restrictions                                                             --
+--  ============                                                             --
+--  R.1 -                                                                    --
+--                                                                           --
+--  References                                                               --
+--  ==========                                                               --
+--  None                                                                     --
+--                                                                           --
+-------------------------------------------------------------------------------
+with System;					use System;
+with Ada.Exceptions;           			use Ada.Exceptions;
+with Ada.Tags;					use Ada.Tags;
+with Ada.Strings.Fixed;				use Ada.Strings.Fixed;
+with Ada.Text_IO;				use Ada.Text_IO;
+with Ada.Streams.Stream_IO;			use Ada.Streams.Stream_IO;
+use  Ada.Streams;
+
+package body Player is
+
+   Version : constant String := "$Id: player.odb,v 1.5 2003/07/05 13:59:16 merdmann Exp $";
+
+   type Handle is access all Object;
+
+   ------------
+   -- Player --
+   ------------
+   function Player(
+      This : in Reference ) return Handle is
+      -- Verify, that a correct object reference is passed and return the
+      -- handle
+   begin
+      if This.all'Tag /= Object'Tag then
+         Raise_Exception(Invalid_Object'Identity, External_Tag(This.all'Tag) );
+      end if;
+
+      return Handle( This );
+   end Player;
+
+   -----------------
+   -- Player_Name --
+   -----------------
+   function Player_Name( 
+      Name : in String ) return String is 
+   begin
+      return "Player " & Name;
+   end Player_Name;
+
+   ------------
+   -- Create --
+   ------------
+   function Create(
+      Name    : in String ) return Reference is
+      -- create a player in the object store.
+      RefName : constant String := Player_name( Name ) ; 
+      P       : Handle := Handle( Lookup_Object( RefName ) );
+      Result  : Reference := Reference(P);
+   begin
+      if P = null then
+         Result := new Object;
+	 Name_Object( Result, RefName );
+
+	 P := Handle( Result );
+         P.Name  := To_Unbounded_String( Name );
+         P.Items := Collection.Create( Name & ".Items" );	
+      end if;
+
+      return Result;
+   end Create;
+   
+   ------------
+   -- Lookup --
+   ------------
+   function Lookup(
+      Name : in String ) return Reference is 
+      RefName : constant String := Player_name( Name ) ; 
+   begin
+      return Lookup_Object( RefName );
+   end Lookup;
+
+   --------------
+   -- Position --
+   --------------
+   procedure Set_Position( 
+      This : in Reference;
+      X,Y  : in Natural ) is
+      P    : Handle := Player( This );
+   begin
+      P.X := X;
+      P.Y := Y;
+   end Set_Position;
+
+   --------------
+   -- Position --
+   --------------
+   procedure Get_Position(
+      This : in Reference;
+      X,Y  : out Natural ) is 
+      P    : Handle := Player( This );
+   begin
+      X := P.X;
+      Y := P.Y;
+   end Get_Position;
+
+   ----------
+   -- Name --
+   ----------
+   function Name(
+      This : in Reference ) return Unbounded_String is 
+      P    : Handle := Player( This );
+   begin
+      return P.Name ;
+   end Name;
+
+begin	
+   Register_Object;
+end Player;

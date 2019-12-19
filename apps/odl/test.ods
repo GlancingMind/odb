@@ -1,0 +1,19 @@
+--
+--
+--
+package Test  is 
+
+   type Object is persistent private;
+
+   type X is new Integer;
+
+private
+
+   type Object is persistent record
+          A,X,Y   : attribute Integer ;			-- this goes into the DB
+          B       : attribute String(1..59) ;		-- this also
+          C       : Integer := 2222 ;			-- this not
+       end record ;
+
+end Test;
+

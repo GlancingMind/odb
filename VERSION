@@ -1,0 +1,6 @@
+CNF_TITLE="Object Persistency Framework for Ada 95"
+CNF_TEAM="ODB Team"
+CNF_PACKAGE=odb
+MAJOR=0
+MINOR=6
+PATCHLEVEL=2

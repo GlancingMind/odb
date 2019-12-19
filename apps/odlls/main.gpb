@@ -1,0 +1,238 @@
+-------------------------------------------------------------------------------
+--                                                                           --
+--  Filename        : $Source: /cvsroot/gnade/odb/apps/odlls/main.gpb,v $
+--  Description     : Main driver of the object viewer 			     --
+--  Author          : Michael Erdmann                                        --
+--  Created         : 18.12.2000                                             --
+--  Last Modified By: $Author: merdmann $				     --
+--  Last Modified On: $Date: 2003/10/06 04:27:56 $			     --
+--  Status          : $State: Exp $					     --
+--                                                                           --
+--  Copyright (C) 2003 Michael Erdmann                                       --
+--                                                                           --
+--  ODB is free software;  you can redistribute it  and/or modify it under   --
+--  terms of the  GNU General Public License as published  by the Free Soft- --
+--  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--  sion. GNADE is distributed in the hope that it will be useful, but WITH- --
+--  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--  for  more details.  You should have  received  a copy of the GNU General --
+--  Public License  distributed with ODB;  see file COPYING.  If not, write  --
+--  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+--  MA 02111-1307, USA.                                                      --
+--                                                                           --
+--  As a special exception,  if other files  instantiate  generics from this --
+--  unit, or you link  this unit with other files  to produce an executable, --
+--  this  unit  does not  by itself cause  the resulting  executable  to  be --
+--  covered  by the  GNU  General  Public  License.  This exception does not --
+--  however invalidate  any other reasons why  the executable file  might be --
+--  covered by the  GNU Public License.                                      --
+--                                                                           --
+--                                                                           --
+--  Functional Description                                                   --
+--  ======================                                                   --
+--  This program displays the contents of an object storage and the related  --
+--  objects them self.							     --
+--                                                                           --
+--  Contact                                                                  --
+--  =======                                                                  --
+--  Error reports shall be handled via http://gnade.sourceforge.net          --
+--  Features and ideas via: gnade-develop@lists.sourceforge.net              --
+--                                                                           --
+--  Author contact:                                                          --
+--               purl:/net/michael.erdmann                                   --
+--                                                                           --
+-------------------------------------------------------------------------------
+with Ada.Command_Line;				use Ada.Command_Line;
+with Ada.Strings.Unbounded;			use Ada.Strings.Unbounded;
+with Ada.Streams.Stream_IO;                     use Ada.Streams.Stream_IO;
+with Ada.Tags;                                  use Ada.Tags;
+with Ada.Exceptions;                            use Ada.Exceptions;
+with Ada.IO_Exceptions;                         use Ada.IO_Exceptions;
+with Ada.Text_IO;				use Ada.Text_IO;
+use  Ada.Streams;
+use  Ada;
+
+with ODB.Memory_Stream;                         use ODB.Memory_Stream;
+with ODB.Storage_Header;                        use ODB.Storage_Header;
+with ODB.Object_Loader;				use ODB.Object_Loader;
+use  ODB;
+
+with Util.String_Array;				use Util.String_Array;
+use  Util;
+
+with Version;
+			  
+procedure Main is
+   Version : constant String :=
+      "$Id: main.gpb,v 1.2 2003/10/06 04:27:56 merdmann Exp $";
+
+   Object_Path : Unbounded_String := To_Unbounded_String("./data");
+   Index_Path  : Unbounded_String := Null_Unbounded_String;
+
+   Argc        : Positive         := 1;
+   OBS         : Stream_Access    := Memory_Stream.Stream(64_000);
+
+   List_All    : Boolean := True;
+
+   ------------
+   -- Report --
+   ------------
+   procedure Report(
+      S : in String := "" ) is 
+   begin
+      Put_Line(S);
+   end Report;
+
+   ----------------
+   -- Copy_Right --
+   ----------------
+   procedure Copyright is 
+   begin
+      Report("ODB Objectstore Viewer; Version " & $Version );
+      Report("Copyright (C) 2003 Michael Erdmann" );
+      Report("");
+   end Copyright;
+
+   ----------
+   -- Help --
+   ----------
+   procedure Help is
+   begin
+      Report("usage: " );
+      Report("   odlls [ option(s) ] index [object(s)] ");
+      Report("");
+      Report("Parameters:" );
+      Report("   index      - the name of a index file ");
+      Report("   object     - The name of an object as stored in the index file");
+      Report("");
+      Report("Options:" );
+      Report("   -o <path>  - The place where the objects are stored" );
+      Report("");
+   end Help;
+
+   --------------------
+   -- Display_Object --
+   --------------------
+   procedure Display_Object(
+      Name   : in String ) is 
+
+      use Streams.Stream_IO;
+
+      OBSize : Natural := 0;
+   
+      Loader : Object_Loader.Object;
+
+      -- Display header
+      procedure Display_Header is 
+         Header : Storage_Header.Object := Object_Loader.Header(Loader) ;
+	 Data   : Stream_Access         := Object_Loader.Stream(Loader) ;
+         R      : String_Array.Handle   := Attributes( Header );
+      begin
+         Report("");
+
+         if R = null then
+	    Report("** Empty header **");
+	    return;
+	 end if;
+
+	 Report( Name & " instance of " & InstanceOf(Loader) & "," & Natural'Image(Size( Data )) & " bytes." );
+	 Report("Attribute Name                             Offset ");
+	 Report("=========================================  ====== ");
+         for i in R'Range loop
+	    declare
+	       Attrib : constant String := To_String(R(i));
+	       Pic    : String( 1..40 ) := (others=>' ');
+	    begin
+	       Pic(1..Attrib'length) := Attrib;
+	       
+	       Report( Pic & "  " &
+	          Natural'Image( Lookup_Attribute(Header, Attrib ) ) );
+	    end;
+	 end loop;
+
+         String_Array.Free( R );
+
+
+	 
+      end Display_Header;
+
+   begin
+      Path(Loader, To_String( Object_Path ) );
+      Read( Loader, Name );
+
+      Display_Header;
+
+   exception
+      when Others =>
+         Report("Error loading " & Name );
+   end Display_Object;
+
+   -------------------
+   -- Display_Index --
+   -------------------
+   procedure Display_Index is
+      -- display the contents of the index 
+      Nbr   : Natural := 0;
+      IDX   : Stream_Access;
+      File  : Stream_IO.File_Type;
+   begin
+     Open( File => File ,
+         Mode => In_File,
+         Name => To_String(Index_Path));
+
+      IDX   := Stream(File);
+
+      Nbr := Natural'Input( IDX );
+      Report( "Number of Objects :" & Natural'Image(Nbr) );
+      Report;
+      for i in 1..Nbr loop
+         declare
+            Name   : constant String := String'Input(IDX);
+         begin
+	    Display_Object( Name );
+         exception
+            when Error : Others =>
+               Report("Exception while loading object " & Name );
+               Report(Exception_Name(Error) & ", " &
+                                   Exception_Message( Error ) );
+         end ;
+      end loop;
+
+      Close( File );
+   end Display_Index;
+
+begin
+   Report("");
+
+   if Argument_Count < 1 then
+      Copyright;
+      Help;
+   end if;
+
+   while Argc <= Argument_Count loop
+      declare
+         Arg : constant String := Argument(Argc);
+      begin
+      	 if Arg = "-o" then
+	    Object_Path := To_Unbounded_String( Arg );
+	 elsif Arg = "-h" then
+	    Help;
+	    return;
+	 elsif Index_Path = Null_Unbounded_String then
+	    Index_Path := To_Unbounded_String( Arg );
+	 else
+	    Display_Object( Arg );
+	    List_All := False;
+	 end if;
+
+         Argc := Argc + 1;
+      end ;
+   end loop;
+
+   if List_All and Index_Path /= Null_Unbounded_String then
+      Display_Index;
+   end if;
+
+end Main;
+

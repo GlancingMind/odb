@@ -1,0 +1,38 @@
+$Id: README,v 1.1 2003/10/12 17:16:42 merdmann Exp $
+
+ODB - Object Persistency Framework for Ada 95
+
+This directory contains the following directories:
+
+adadoc				- The adadoc component
+autoconf			- code for autoconf	
+base				- some base components 
+bin				- all shell ecripts
+doc				- where documentation is stored
+etc				- site dependant configuration data
+pkg-config
+
+apps				- applications provided by this software
+src				- all code for the ODB environment
+support				- support code baed on odb and the applications
+util                            - utility library 
+samples				- some application examples
+test				- test code for certain aspects of ODB
+
+
+After running the configure script, the following directories are generated:
+
+Production results:
+
+	linux-gnu-i686-bin
+	linux-gnu-i686-doc
+	linux-gnu-i686-include
+	linux-gnu-i686-install
+	linux-gnu-i686-lib
+
+Others:
+
+var				- where local data is to be stored
+
+
+

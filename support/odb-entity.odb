@@ -1,0 +1,267 @@
+-------------------------------------------------------------------------------
+--                                                                           --
+--  Filename        : $Source: /cvsroot/gnade/odb/support/odb-entity.odb,v $
+--  Version         : $Revision: 1.1 $                                       --
+--  Description     : A relation of persistent objects                       --
+--  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>             --
+--  Created On      : 30-June-2003                                           --
+--  Last Modified By: $Author: merdmann $				     --
+--  Last Modified On: $Date: 2003/07/20 14:42:33 $                           --
+--  Status          : $State: Exp $                                          --
+--                                                                           --
+--  Copyright (C) 2003 Michael Erdmann                                       --
+--                                                                           --
+--  ODB is free software;  you can redistribute it  and/or modify it under   --
+--  terms of the  GNU General Public License as published  by the Free Soft- --
+--  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--  sion.  ODB is distributed in the hope that it will be useful, but WITH-  --
+--  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--  for  more details.  You should have  received  a copy of the GNU General --
+--  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+--  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+--  MA 02111-1307, USA.                                                      --
+--                                                                           --
+--  As a special exception,  if other files  instantiate  generics from this --
+--  unit, or you link  this unit with other files  to produce an executable, --
+--  this  unit  does not  by itself cause  the resulting  executable  to  be --
+--  covered  by the  GNU  General  Public  License.  This exception does not --
+--  however invalidate  any other reasons why  the executable file  might be --
+--  covered by the  GNU Public License.                                      --
+--                                                                           --
+--  Functional Description                                                   --
+--  ======================                                                   --
+--                                                                           --
+--  Restrictions                                                             --
+--  ============                                                             --
+--                                                                           --
+--  References                                                               --
+--  ==========                                                               --
+--  None                                                                     --
+--                                                                           --
+-------------------------------------------------------------------------------
+with Ada.Strings.Unbounded;			use Ada.Strings.Unbounded;
+with Ada.Streams.Stream_IO;                     use Ada.Streams.Stream_IO;
+with Ada.Streams;                               use Ada.Streams;
+with Ada.Tags;     				use Ada.Tags;
+with Ada.Text_IO;				use Ada.Text_IO;
+with Ada.Exceptions;           			use Ada.Exceptions;
+use  Ada;
+with Unchecked_Deallocation;
+
+
+with ODB.Classes;				use ODB.Classes;
+
+package body ODB.Entity is
+
+   Version : constant String := "$Id: odb-entity.odb,v 1.1 2003/07/20 14:42:33 merdmann Exp $";
+   
+   ---------------
+   -- Pair_Type --
+   ---------------
+   type Pair_Type is record
+         Name  : Unbounded_String;
+	 Value : Reference;
+      end record;
+
+   type Pair_Array is array( Natural range <> ) of Pair_Type;
+   type Pair_Array_Access is access Pair_Array;
+
+   procedure Free is
+      new Unchecked_Deallocation( Pair_Array, Pair_Array_Access);
+
+   ----------------------
+   -- Object_Data_Type --
+   ----------------------
+   type Object_Data_Type  is record
+         Name  : Unbounded_String;
+	 Used  : Natural := 0;
+	 Pairs : Pair_Array_Access := null;
+      end record;
+
+   procedure Free is
+      new Unchecked_Deallocation( Object_Data_Type, Object_Data_Access);
+
+   -- this for internal use only.
+   type Handle is access all Object;
+
+
+   ------------------------------
+   -- Write_Object_Data_Access --
+   ------------------------------
+   procedure Write_Object_Data_Access(
+      Stream : access Root_Stream_Type'Class;
+      Item   : in Object_Data_Access ) is 
+   begin
+      Unbounded_String'Output( Stream, Item.Name );
+      Natural'Output( Stream, Item.Used );
+
+      for i in 1..Item.Used loop
+         Unbounded_String'Output( Stream, Item.Pairs(i).Name );
+         Reference'Output( Stream, Item.Pairs(i).Value );
+      end loop;
+
+   end Write_Object_Data_Access;
+
+   -----------------------------
+   -- Read_Object_Data_Access --
+   -----------------------------
+   function Read_Object_Data_Access(
+      Stream : access Root_Stream_Type'Class ) return Object_Data_Access is 
+      Result : Object_Data_Access := new Object_Data_Type;
+   begin
+      Result.Name := Unbounded_String'Input(Stream);
+      Result.Used := Natural'Input( Stream );
+      Result.Pairs := new Pair_Array( 1..Result.Used+20 );
+
+      for i in 1..Result.Used loop
+         Result.Pairs(i).Name := Unbounded_String'Input(Stream);
+	 Result.Pairs(i).Value := Reference'Input(Stream);
+      end loop;
+
+      return Result ;
+   end Read_Object_Data_Access;
+
+   ------------
+   -- Entity --
+   ------------
+   function Entity(
+      This : in Reference ) return Object_Data_Access is 
+      -- Verify, that a correct object reference is passed and return the 
+      -- handle 
+   begin
+      if This = null then
+	 Raise_Exception(Invalid_Object'Identity, "null reference" );
+      end if;
+
+      if This.all'Tag /= Object'Tag then
+	 Raise_Exception(Invalid_Object'Identity, External_Tag(This.all'Tag) );
+      end if;
+
+      return Handle( This ).Data;
+   end Entity;
+
+   ------------
+   -- Create --
+   ------------
+   function Create( 
+      Name   : in String ) return Reference is 
+      -- create an entity. If it is already exisiting use the 
+      -- existing one.
+      Result : Reference := Lookup_Object( Name );
+      Data   : Object_Data_Access := new Object_Data_Type;
+   begin
+      if Result  = null then
+         Result := new Object;
+         Name_Object( Result, Name );
+
+	 Data   := new Object_Data_Type;
+	 Handle( Result ).Data := Data;
+
+	 Data.Pairs := new Pair_Array( 1..20 );
+	 Data.Used  := 0;
+	 Data.Name  := To_Unbounded_String( Name );
+      end if;
+
+      return Result;
+   end Create;
+
+   ----------
+   -- Name --
+   ----------
+   function Name(
+      This : in Reference ) return String is 
+      R    : Object_Data_Access := Entity( This );
+   begin
+      return To_String( R.Name );
+   end Name;
+
+   ----------------
+   -- Attributes --
+   ----------------
+   function Attributes(
+      This   : in Reference ) return Attribute_Array_Access  is 
+      R      : Object_Data_Access := Entity( This );
+      Result : Attribute_Array_Access := null ;
+   begin
+      if R.Used = 0 then
+         return null;
+      end if;
+
+      Result := new Attribute_Array( 1..R.Used );
+      for i in 1..R.Used loop
+         Result(i) := R.Pairs(i).Name;
+      end loop;
+
+      return Result;
+   end Attributes;
+
+   ---------------
+   -- Attribute --
+   ---------------
+   function Attribute(
+      This   : in Reference;
+      Name   : in String ) return Reference is 
+      -- get 
+      R      : Object_Data_Access  := Entity( This );
+      Pairs  : Pair_Array_Access renames R.Pairs;
+      Result : Reference := null;
+   begin
+      for i in Pairs'Range loop
+         if Pairs(i).Name = Name then
+	    return Pairs(i).Value ;
+	 end if;
+      end loop;
+      
+      return null;
+   end Attribute;
+
+   ---------------
+   -- Attribute --
+   ---------------
+   procedure Attribute(
+      This   : in Reference;
+      Name   : in String;
+      Value  : in Reference ) is 
+      -- add a name/value pair
+      R      : Object_Data_Access  := Entity( This );
+      Pairs  : Pair_Array_Access renames R.Pairs;
+      Used   : Natural           renames R.Used;
+   begin
+      for i in Pairs'Range loop
+         if Pairs(i).Name = Name then
+	    Pairs(i).Value := Value ;
+	 end if;
+      end loop;
+
+      Used := Used + 1;
+      if not (Used in Pairs'Range) then
+         declare
+	   Tmp : Pair_Array_Access := new Pair_Array( 1..Used + 20 );
+	 begin
+	   Tmp( 1..Used-1 ) := Pairs.all;
+	   Free( Pairs );
+	   Pairs := Tmp;
+      	 end;
+      end if;
+
+      Pairs(Used).Name  := To_Unbounded_String(Name);
+      Pairs(Used).Value := Value;      
+   end Attribute;
+
+   -------------
+   -- Destroy --
+   -------------
+   procedure Destroy(
+      This : in out Reference ) is 
+      R    : Object_Data_Access  := Entity( This );
+   begin
+      Free( R.Pairs );
+      Free( R );
+      This := null;
+   end Destroy;
+
+
+begin
+   Register_Object;
+end ODB.Entity;

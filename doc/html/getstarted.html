@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>Getting started</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Introduction"
+HREF="part1.html"><LINK
+REL="PREVIOUS"
+TITLE="Overview"
+HREF="overview.html"><LINK
+REL="NEXT"
+TITLE="ODB Basics"
+HREF="basics.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="overview.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="basics.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="GETSTARTED"
+></A
+>Chapter 2. Getting started</H1
+><P
+>The ODB environment is distributed as source package, which 
+means in order to use is, the software has to be build (compiled
+and linked) on your system before it can be used.</P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN85"
+></A
+>Installation on Unix like systems</H1
+><P
+>   After you  obtained the source code from the net you 
+   need to install and compile it. This chapter describes
+   this first steps of installing the environment onto 
+   your system.
+   </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN88"
+></A
+>Unpacking the distribution</H2
+><P
+>   The source code is normally distributed as compressed tar 
+   file. To unpack the distribution execute the command:
+   <PRE
+CLASS="PROGRAMLISTING"
+>      gunzip -c tarfilename.gz | tar xvf -
+   </PRE
+> 
+   This will unpack the directory tree of the development 
+   environment. 
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN92"
+></A
+>Configuring the ODB installation</H2
+><P
+>   After unpacking the distribution change into the top level directory 
+   of the ODB release. Before you run the configure script examine the 
+   contents of the file etc/config.site. 
+   </P
+><P
+>   After checking the settings, the environment has to be configured
+   by means of the command:
+   <PRE
+CLASS="PROGRAMLISTING"
+>&#13;       cd odb-src-....
+       ./configure [ option(s) ]
+
+   </PRE
+>
+   This command will perform the actual configuration by checking 
+   for requiered software components and installation options.
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN97"
+></A
+>Compiling the distribution</H2
+><P
+>   To build the environment enter the command below:
+   <PRE
+CLASS="PROGRAMLISTING"
+>   gmake all
+   </PRE
+>
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN101"
+></A
+>Installing globally on the target system</H2
+><P
+>   Currently there is no automatic procedure available. You need to copy
+   the compolents from the following directories manually into some reasonable
+   directories.
+   </P
+><PRE
+CLASS="PROGRAMLISTING"
+>linux-gnu-i686-bin
+linux-gnu-i686-doc
+linux-gnu-i686-include
+linux-gnu-i686-install
+linux-gnu-i686-lib
+   </PRE
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN105"
+></A
+>GPS Support</H2
+><P
+>This release contains some files to support the GPS environment
+      from ACT. The source root directory contains a file which is called 
+      gnu.xml which contains extensions in the GPS menus allowing you to 
+      configure and to compile the release from the GPS environment. This file
+      should be installed locally in the directory .gps/customize or in the 
+      installation directory of GPS as described in the documents.</P
+><P
+>The HTML based documentation is also made available via GPS
+      if the environment variable GPS_DOC_PATH contains the place where 
+      ODB is installed.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="overview.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="basics.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Overview</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part1.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB Basics</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

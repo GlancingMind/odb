@@ -1,0 +1,11 @@
+MANIFEST.local
+Makefile
+Makefile.local
+odb-collection.odb
+odb-collection.ods
+odb-entity.odb
+odb-entity.ods
+odb-generic_collection.odb
+odb-generic_collection.ods
+odb-lock_table.ads
+odb-lock_table.adb

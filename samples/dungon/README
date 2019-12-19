@@ -1,0 +1,11 @@
+This directory contains the so called dungon f wizdom.
+
+The program provides you a grid of connected rooms. Each
+room might be owned by some body. 
+
+You can move between rooms with the commands
+
+left, right, forward, back
+
+The command drop allowes to store things in a room. 
+

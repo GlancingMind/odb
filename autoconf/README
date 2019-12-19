@@ -1,0 +1,8 @@
+This is the working directory for the autconf 
+utility. The makefile is invoked by the ../configure 
+script
+
+
+- ../base/configure.in  - Parameter file fuer autoconf
+- ../make.conf.in  - Include file für all make file
+

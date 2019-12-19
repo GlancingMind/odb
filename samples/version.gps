@@ -1,0 +1,5 @@
+package Version is 
+
+   Id : constant String := $VERSION;
+
+end Version;

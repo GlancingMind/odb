@@ -1,0 +1,402 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB.Memory_Stream"
+HREF="c530.htm"><LINK
+REL="PREVIOUS"
+TITLE="ODB.Memory_Stream"
+HREF="c530.htm"><LINK
+REL="NEXT"
+TITLE="ODB.Object_Loader"
+HREF="c610.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c530.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. ODB.Memory_Stream</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c610.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN548"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN550"
+></A
+>function Stream</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Stream(  
+      Size : in Stream_Element_Offset ) return Stream_Access; 
+ </PRE
+><PRE
+CLASS="PROGRAMLISTING"
+>   Buffer_Overrun  : exception; 
+   Buffer_Underrun : exception; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN554"
+></A
+>Description</H4
+><P
+>    Create a memory stream </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN556"
+></A
+>Preconditions</H4
+><P
+> Postconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN558"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN560"
+></A
+>procedure Destroy</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Destroy(  
+      This : in out Stream_Access ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN563"
+></A
+>Description</H4
+><P
+>    Destroy the memory stream </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN565"
+></A
+>Preconditions</H4
+><P
+>    C.1 - The stream has to be valid </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN567"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN569"
+></A
+>procedure Clear</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Clear(   
+      This : in Stream_Access ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN572"
+></A
+>Description</H4
+><P
+>   Clear the memory stream. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN575"
+></A
+>Preconditions</H4
+><P
+>   C.1 - Stream has to be valid </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN578"
+></A
+>Postconditions</H4
+><P
+>   P.1 - Read and write pointer are reseted. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN580"
+></A
+>Exceptions</H4
+><P
+> Notes: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN582"
+></A
+>function Write_Offset</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Write_Offset(   
+      This : in Stream_Access ) return Natural; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN585"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN587"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN589"
+></A
+>procedure Read_Offset</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Read_Offset(   
+      This   : in Stream_Access; 
+      Offset : in Natural ) ; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN592"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN594"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN596"
+></A
+>procedure Copy_In</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Copy_In(   
+      This   : in Stream_Access; 
+      Source : in Stream_Element_Array ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN599"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN601"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN603"
+></A
+>procedure Copy_Out, function Size</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Copy_Out(  
+      This   : in Stream_Access; 
+      Target : in out Stream_Element_Array; 
+      Last   : out Stream_Element_Offset ); 
+ 
+ 
+   function Size( 
+      This   : in Stream_Access ) return Natural; 
+ 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN606"
+></A
+>Description</H4
+><P
+> Preconditions: </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN608"
+></A
+>Postconditions</H4
+><P
+> Exceptions: </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c530.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c610.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Memory_Stream</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c530.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.Object_Loader</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,10 @@
+MANIFEST.local
+README
+Makefile
+game.odb
+game.ods
+main.adb
+player.odb
+player.ods
+room.odb
+room.ods

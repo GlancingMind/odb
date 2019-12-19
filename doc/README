@@ -1,0 +1,5 @@
+This directory contains the environment for the project documentation.
+
+./reference    - Reference Manual (docbook)
+./releasenotes - Release Notes of the project (HTML)
+./publications - LaTex Presentation

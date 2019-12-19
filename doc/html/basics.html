@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>ODB Basics</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Introduction"
+HREF="part1.html"><LINK
+REL="PREVIOUS"
+TITLE="Getting started"
+HREF="getstarted.html"><LINK
+REL="NEXT"
+TITLE="Object Life Cycle"
+HREF="x126.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="getstarted.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x126.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="BASICS"
+></A
+>Chapter 3. ODB Basics</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="basics.html#AEN113"
+>Object Model of ODB</A
+></DT
+><DT
+><A
+HREF="x126.htm"
+>Object Life Cycle</A
+></DT
+><DT
+><A
+HREF="x179.htm"
+>ODB API</A
+></DT
+><DT
+><A
+HREF="x182.htm"
+>Connection with the storage media</A
+></DT
+></DL
+></DIV
+><P
+>This section gives an brief overview about the ODB package from 
+   the programers point of view</P
+><P
+>An object is an instance of a class. A class is assumed to be 
+   implemented as an Ada 95 package which exports a data type and operations
+   on this data type.</P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN113"
+></A
+>Object Model of ODB</H1
+><P
+>Persistent objects are always derived from the type 
+      ODB.Persistent.Object. All persistent objects are allocated in 
+      dedicated storage pool. Each object in the storage pool is linked
+      to a so called object table which is contained in the ODB.Persistent
+      package.</P
+><P
+>Since the type Persistent.Object is abstract, the implementation
+      for the following methods has to be provided by any implementation
+      of persistent object:</P
+><P
+></P
+><UL
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>Factory</P
+></LI
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>Serialize</P
+></LI
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>Deserialize</P
+></LI
+></UL
+><P
+>The function Factory return a pointer to an instance of the 
+      class.</P
+><P
+>Serialize writes out the object attributes into a memory stream
+      and at the same time it has to setup the header information of an 
+      instance. The header contains a list of all attributes stored in the 
+      object and the corresponding offsets.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="getstarted.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x126.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Getting started</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="part1.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Object Life Cycle</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

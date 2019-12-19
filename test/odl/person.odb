@@ -1,0 +1,77 @@
+with Ada.Text_IO;				use Ada.Text_IO;
+
+package body Person  is 
+
+   type Handle is access all Person.Object;
+
+   ------------
+   -- Create --
+   ------------
+   function Create( 
+      Name   : in String;
+      Street : in String ) return Reference is
+      Result : Reference := Lookup_Object( Name ); 
+      H      : Handle := null;
+   begin
+      if Result = null then
+         Result := new Object;
+      end if;
+
+      H := Handle( Result );
+
+      H.Name   := To_Unbounded_String(Name);
+      H.Street := To_Unbounded_String(Street);
+      H.Zip    := 9999;
+
+      return Result;
+   end Create;
+
+   ----------
+   -- Name --
+   ----------
+   procedure Name(
+      This  : in Reference;
+      Value : in String ) is 
+      H     : Handle := Handle(This);
+   begin
+      H.Name := To_Unbounded_String( Value );
+   end Name;
+
+   ------------
+   -- Street --
+   ------------
+   procedure Street(
+      This  : in Reference;
+      Value : in String ) is 
+      H     : Handle := Handle(This);
+   begin
+      H.Street := To_Unbounded_String( Value );
+   end Street;
+
+   ---------
+   -- Zip --
+   ---------
+   procedure Zip( 
+      This  : in Reference;
+      Value : in Natural ) is
+      H     : Handle := Handle(This);
+   begin
+      H.Zip := Value;
+   end Zip;
+
+
+   -------------
+   -- Display --
+   -------------
+   procedure Display(
+      This : in Reference ) is 
+      H    : Handle := Handle(This);
+   begin
+      Put_Line("Name   : " & To_String( H.Name ) );
+      Put_Line("Street : " & To_String( H.Street ) );
+   end Display;
+
+begin
+   Register_Object;   
+end Person;
+

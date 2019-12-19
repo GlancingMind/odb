@@ -1,0 +1,277 @@
+#!/bin/sh
+## @configure_input@
+## ----------------------------------------------------------------------------
+##                                                                           --
+##  Filename        : $Source: /cvsroot/gnade/odb/bin/install-odb.sh.in,v $
+##  Description     : Online installation procedure
+##  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>
+##  Created On      : 9-April-2002
+##  Last Modified By: $Author: merdmann $
+##  Last Modified On: $Date: 2003/10/14 19:16:02 $
+##  Status          : $State: Exp $
+##
+##  Copyright (C) 2003 Michael Erdmann                                       --
+##                                                                           --
+##  ODB is copyrighted by the persons and institutions enumerated in the     --
+##  AUTHORS file. This file is located in the root directory of the          --
+##  ODB distribution.                                                        --
+##                                                                           --
+##  ODB is free software;  you can redistribute it  and/or modify it under   --
+##  terms of the  GNU General Public License as published  by the Free Soft- --
+##  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+##  sion.  ODB is distributed in the hope that it will be useful, but WITH-  --
+##  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+##  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+##  for  more details.  You should have  received  a copy of the GNU General --
+##  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+##  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+##  MA 02111-1307, USA.                                                      --
+##                                                                           --
+##  As a special exception,  if other files  instantiate  generics from      --
+##  ODB Ada units, or you link GNADE Ada units or libraries with other       --
+##  files  to produce an executable, these  units or libraries do not by     --
+##  itself cause the resulting  executable  to  be covered  by the  GNU      --
+##  General  Public  License.  This exception does not however invalidate    --
+##  any other reasons why  the executable file  might be covered by the      --
+##  GNU Public License.                                                      --
+##                                                                           --
+## ----------------------------------------------------------------------------
+. @prefix@/bin/vars.sh
+
+##
+## Internall used definitions
+##
+opt_force="n"
+root=""
+instbin="@INSTALL@"
+
+##
+##
+##
+RC="0";
+
+##
+## Install a shared library
+##
+sharedlib() {
+   ll=$1-$MAJOR.$MINOR.$PATCHLEVEL.so
+
+   rm -rf $targetlib/$ll  $targetlib/$1.so
+   if test -e $libdir/$ll; then
+      echo -n "   $ll ..." 
+      $instbin   -p -m 0555 $libdir/$ll $targetlib
+      if test "$?" = "0";  then
+         ( cd $targetlib; ln -s $ll $1.so )
+	 echo " done."
+      else
+         echo "** failed **";
+         RC="1"
+      fi;
+   else
+      echo "   $ll not installed (not available)."
+   fi
+}
+
+##
+## Install a static library
+##
+staticlib() {
+   if test -e $libdir/$1.a; then
+      echo -n "   $1.a ..."
+      $instbin   -p -m 0444 $libdir/$1.a $targetlib
+      if test "$?" != "0";  then
+         echo "** failed **"
+         RC="1" 
+      else
+	 echo " done."
+      fi
+   fi
+}
+
+##
+## install a binary
+##
+binary() {
+   echo -n "   $1 ..."
+   $instbin   -p -m 0555 $1 $targetbin
+   if test "$?" != "0";  then
+      echo "** failed **"
+      RC="1"
+   fi
+   echo
+}
+
+##
+## Scan the argument list for usable commands
+##
+scanargs() {
+    for i in $* ; do
+
+       case "$1" in
+          -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+             *) optarg= ;;
+       esac
+
+       case $i in
+          --rpmroot=*)
+	     root=$optarg
+	     ;;
+
+          -f|--force)
+	     opt_force="y"
+	     ;;
+	  *)
+	     ;;
+
+       esac
+       shift 
+    done
+}
+
+##
+##
+##
+echo
+echo "ODB System wide installation procedure; Version $version"
+echo "Copyright (C) 2003, M.Erdmann (http://www.purl.org/net/michael.erdmann)"
+echo 
+
+scanargs $*
+
+if test "x$root" = "x" ; then   
+   targetlib=@site_libdir@
+   targetbin=@site_bindir@
+   targetinc=@site_incdir@   
+   targetshared=@site_shared@
+   targetdoc=@site_docdir@
+else
+   targetlib=$root/lib
+   targetbin=$root/bin
+   targetinc=$root/include
+   targetshared=$root/shared
+   targetdoc=$root/doc
+fi
+
+ask() {
+   echo -n "$1 (y/n)?"
+   read a
+   case $a in
+      n|N|no|No|NO)
+         echo "Installation aborted, nothing changed"
+         exit 0
+         ;;
+      *) 
+         echo 
+         ;;
+   esac;
+}
+
+
+##
+## check if everthing is in place:
+##
+##  1) user id = root
+##  2) 
+##
+##
+uid=`id -u`
+if test $uid != "0"
+then
+    echo "*** ERROR ***"
+    echo "Sorry, but you are logged in as user `id -u -n`. You need to "
+    echo "login as system administrator (root) to complete the installation"
+    echo "properly."
+    echo 
+    exit 255
+fi
+
+##
+## If the force option is not set, the user is asked for confirmation
+##
+if test $opt_force = "n"
+then
+   host=`hostname`
+   echo "This procedure will install ODB $version on host $host globaly"
+   echo "in the directories:"
+   echo ""
+   echo "   $targetinc"
+   echo "   $targetlib"
+   echo "   $targetbin"
+   echo "   $targetdoc"
+   echo 
+   ask "Do you want to continue"
+fi
+
+##
+## Install the directories and the gnat units
+##
+if test -z "$targetlib"; then
+   echo 
+   echo "ERROR: There is a configuration error. The destination directory"
+   echo "       of the gnade libraries have not been defined. Please check "
+   echo "       the contents of etc/config.site."
+   echo 
+   exit $RC   
+fi;
+
+echo -n "Installing ODB units in $targetinc ... "
+$instbin -d $targetinc
+$instbin -p -m 0444 $includedir/*.ad[bs] $targetinc
+$instbin -p -m 0444 $includedir/*.ali $targetinc
+echo " done."
+echo
+
+####
+echo "Installing ODB tools in $targetbin"
+$instbin -d $targetbin 
+for i in $bindir/* ; do
+   binary $i
+done
+
+##
+## Install a static library
+##
+echo
+echo "Installing ODB core libraries in $targetlib"
+$instbin -d $targetlib
+
+staticlib libodb
+staticlib libodbutil
+staticlib libodbsupport
+sharedlib libodb
+sharedlib libodbutil
+sharedlib libodbsupport
+##
+## Install the pkg configuration
+##
+if test -n "@pkgconfig@" ; then
+   $instbin   -p -m 0444 $installdir/odb.pc @site_pkgconfig_path@
+   @pkgconfig@ odb
+fi; 
+
+echo
+echo "Installing documentation"
+$instbin -d $targetdoc
+cp -R $docdir/* $targetdoc
+
+echo "Installing Ada IDE (GPS) support"
+case $adaide in
+   gps)        
+   	if test -d $adapath/../share/gps ; then
+   	   $instbin   -p -m 0444 $installdir/gnu.xml $adapath/../share/gps/customize
+	fi
+	echo "Add to your GPS_DOC_PATH the directory $targetdoc"
+   	;;
+esac
+##
+##
+##
+echo
+if test "$RC" = "0"; then
+   echo "Installation has finished successfully"
+else
+   echo "**** Installation failed, the installation is incomplete! ****"
+fi
+echo
+
+exit $RC

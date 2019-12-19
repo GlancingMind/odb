@@ -1,0 +1,24 @@
+<appendix id="faq">
+   <title>Frequently asked questions</title>
+   <para>
+      This section contains the FAQ's of the ABE project.
+   </para>
+   <sect1>
+      <title>Q: How do i update</title>
+      <para>
+      How can i update the ABE environment without disturging any thing?
+      </para>
+
+      <para>
+      ...........................
+      </para>
+
+      <example>
+      <title>Updating ABE</title>
+      <programlisting>
+
+      </programlisting>
+      </example>
+   </sect1>
+
+</appendix>

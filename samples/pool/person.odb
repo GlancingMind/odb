@@ -1,0 +1,171 @@
+-------------------------------------------------------------------------------
+--                                                                           --
+--  Filename        : $Source: /cvsroot/gnade/odb/samples/pool/person.odb,v $
+--  Version         : $Revision: 1.1 $                                       --
+--  Description     : ODB Database connection                                --
+--  Author          : Michael Erdmann <Michael.Erdmann@snafu.de>             --
+--  Created On      : 21-June-2003                                           --
+--  Last Modified By: $Author: merdmann $				     --
+--  Last Modified On: $Date: 2003/08/11 19:53:15 $                           --
+--  Status          : $State: Exp $                                          --
+--                                                                           --
+--  Copyright (C) 2003 Michael Erdmann                                       --
+--                                                                           --
+--  ODB is free software;  you can redistribute it  and/or modify it under   --
+--  terms of the  GNU General Public License as published  by the Free Soft- --
+--  ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--  sion.  ODB is distributed in the hope that it will be useful, but WITH-  --
+--  OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--  for  more details.  You should have  received  a copy of the GNU General --
+--  Public License  distributed with GNAT;  see file COPYING.  If not, write --
+--  to  the Free Software Foundation,  59 Temple Place - Suite 330,  Boston, --
+--  MA 02111-1307, USA.                                                      --
+--                                                                           --
+--  As a special exception,  if other files  instantiate  generics from this --
+--  unit, or you link  this unit with other files  to produce an executable, --
+--  this  unit  does not  by itself cause  the resulting  executable  to  be --
+--  covered  by the  GNU  General  Public  License.  This exception does not --
+--  however invalidate  any other reasons why  the executable file  might be --
+--  covered by the  GNU Public License.                                      --
+--                                                                           --
+--  Functional Description                                                   --
+--  ======================                                                   --
+--  This object represents the connection to a database.                     --
+--                                                                           --
+--  Restrictions                                                             --
+--  ============                                                             --
+--  R.1 -                                                                    --
+--                                                                           --
+--  References                                                               --
+--  ==========                                                               --
+--  None                                                                     --
+--                                                                           --
+-------------------------------------------------------------------------------
+with System;					use System;
+with Ada.Exceptions;           			use Ada.Exceptions;
+with Ada.Tags;					use Ada.Tags;
+with Ada.Strings.Fixed;				use Ada.Strings.Fixed;
+with Ada.Text_IO;				use Ada.Text_IO;
+with Ada.Streams.Stream_IO;			use Ada.Streams.Stream_IO;
+use  Ada.Streams;
+
+with ODB.Storage.File;				use ODB.Storage.File;
+use  ODB.Storage;
+
+
+package body Person is
+
+   Version : constant String := "$Id: person.odb,v 1.1 2003/08/11 19:53:15 merdmann Exp $";
+
+   First_Time : Boolean := True;
+
+   type Handle is access all Object;
+
+   File_Store : File.Object;
+
+   ----------------
+   -- Lookup_Key --
+   ----------------
+   function Lookup_Key(
+      First_Name : in Unbounded_String;
+      Last_Name  : in Unbounded_String ) return String is 
+   begin
+      return To_String( First_Name ) & "." & To_String( Last_Name );
+   end Lookup_Key;
+
+   ------------
+   -- Create --
+   ------------
+   function Create(
+      First_Name : in Unbounded_String;
+      Last_Name  : in Unbounded_String ) return Reference is 
+      -- create an instance with a unique name
+      OName      : constant String := Lookup_Key( First_Name, Last_Name );
+      Result     : Reference := Lookup_Object( OName );
+      Item       : Handle := Handle(Result);
+   begin
+      if Result = null then
+         Result := new Object;
+	 Item   := Handle( Result );
+
+         Move( Source => To_String(First_Name), Target => Item.First_Name );
+         Move( Source => To_String(Last_Name),  Target => Item.Last_Name );
+
+         Name_Object( Result, OName );
+	 Put_Line("Newly Created : " & Natural'Image(Object_ID(Result)) );
+      else
+	 Put_Line("Old Object : " & Natural'Image(Object_ID(Result)) );
+      end if;
+      return Result;
+   end Create;
+
+   ----------------
+   -- Managed_By --
+   ----------------
+   procedure Managed_By( 
+      Ref  : in Reference;
+      Boss : in Reference ) is
+   begin
+      Handle(Ref).Boss := Boss;
+   end Managed_By;
+
+   -------------
+   -- Display --
+   -------------
+   procedure Display(
+      First_Name : in Unbounded_String;
+      Last_Name  : in Unbounded_String ) is 
+      OName      : constant String := Lookup_Key( First_Name, Last_Name );
+   begin
+      Display( Lookup_Object( OName ) );
+   end Display;
+
+   -------------
+   -- Display --
+   -------------
+   procedure Display(
+      Ref  : in Reference ) is 
+      Item : Handle := Handle(Ref);
+   begin
+      Put_Line("Name : " & Item.Last_Name );
+      Put_Line("First Name:" & Item.First_Name );
+      if Item.Boss /= null then
+         Put_Line("Managed by:" );
+	 Display( Item.Boss );
+      end if;
+      Put_Line("");
+   end Display;
+
+   ------------
+   -- Lookup --
+   ------------
+   function Lookup(
+      First_Name : in Unbounded_String;
+      Last_Name  : in Unbounded_String ) return Reference is 
+   begin
+      return Lookup_Object( Lookup_Key( First_Name, Last_Name ) ); 
+   end Lookup;
+
+   ----------
+   -- Save --
+   ----------
+   procedure Save is
+   begin
+      File.Save( File_Store );
+   end Save;
+
+   ----------
+   -- Load --
+   ----------
+   procedure Load is 
+   begin
+      File.Load( File_Store );
+   end Load;
+
+begin	
+   Register_Object;
+
+   File.Index_Path( File_Store, "person.pool" );
+   File.Pool_Path( File_Store, "./data/" );
+end Person;

@@ -1,0 +1,281 @@
+<HTML
+><HEAD
+><TITLE
+>Modelling Objects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="User Guide to ODB"
+HREF="using.html"><LINK
+REL="PREVIOUS"
+TITLE="Building Applications"
+HREF="apps.html"><LINK
+REL="NEXT"
+TITLE="Deriving persistent objects"
+HREF="x270.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="apps.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x270.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="MODELLING"
+></A
+>Chapter 6. Modelling Objects</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="model.html#AEN255"
+>Definition of persistent Objects</A
+></DT
+><DT
+><A
+HREF="x270.htm"
+>Deriving persistent objects</A
+></DT
+></DL
+></DIV
+><P
+>Since ODL is only a minor extension of Ada 95 only the 
+      extensions are described below on basis of examples.</P
+><P
+>The example below (Test.odb) shows a short fragment. It 
+      defines the two types X, Object. The type object is defined as
+      a persistent object which is defined in more detail in the 
+      private section of the file.
+      <DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN252"
+></A
+><P
+><B
+>Example 6-1. A minimal Object Model file</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>package Test  is
+
+   type Object is persistent private;
+
+   type X is new Integer;
+
+private
+
+   type Object is persistent record
+          A,X,Y   : attribute Integer ;                 -- this goes into the DB
+          B       : attribute String(1..50) ;           -- this also
+          C       : Integer := 2222;                    -- this not
+       end record ;
+
+end Test;
+	 </PRE
+></DIV
+>
+      Each field of Object can be marked with the keyword attribute. This 
+      keyword indicates, that these parameters will be made persistent. All
+      other field will stay transient. Initializers for all fields may be 
+      used but they will only be invoked when the object is first created,
+      with the exception, that fields, which are not attributes, will be 
+      set to these values when the application loads the objects.
+      </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN255"
+></A
+>Definition of persistent Objects</H1
+><P
+>This section describes how persistent object are defined
+	 in the ODL language.</P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN258"
+></A
+>Object definition clause</H2
+><P
+>This keyword may be used in a type definition of a record.
+	 The keyword indicates, that the following record definition defines
+	 a persistent object.
+	 
+         <DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN261"
+></A
+><P
+><B
+>Example 6-2. Syntax: persistent object definition</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>	    'type' &lt;name&gt; 'is' 'persistent' 
+	          'record' &lt;attributes;&gt; 'end' 'record'
+	 </PRE
+></DIV
+>
+	 </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN264"
+></A
+>Attribute Definition Clause</H2
+><P
+>The attribute keyword may only be used within persistent
+	 object. Itr allows to indicate those fields which will be stored
+	 in the persistent object storage.
+
+         <DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN267"
+></A
+><P
+><B
+>Example 6-3. Syntax: Attribute Definition</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>	    attribue def; ::= &lt;field&gt; &lt;attribute def&gt;
+	    field ::= &lt;name list&gt; ':' [ &lt;attribute&gt; ] &lt;type def&gt;
+	 </PRE
+></DIV
+>
+	 All fields in a persistent object which are not marked as an attribute
+	 will not be stored in the object storage.
+	 </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="apps.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x270.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Building Applications</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="using.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Deriving persistent objects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

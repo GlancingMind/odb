@@ -1,0 +1,397 @@
+<HTML
+><HEAD
+><TITLE
+>Object Life Cycle</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="ODB Basics"
+HREF="basics.html"><LINK
+REL="PREVIOUS"
+TITLE="ODB Basics"
+HREF="basics.html"><LINK
+REL="NEXT"
+TITLE="ODB API"
+HREF="x179.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="basics.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. ODB Basics</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x179.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN126"
+></A
+>Object Life Cycle</H1
+><P
+>In order to make an persistent object really persistent,
+      the object has to be named. Otherwise, the application would not
+      be able to retrieve the object.</P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN129"
+></A
+>Loading objects</H2
+><P
+>Upon startup of an application using ODB, all types which
+      are intended to be stored in the object store are registered in 
+      the ODB.Persistent package. Together with the type name, the 
+      pointer to a procedure is stored. This procedure is called Factory
+      and is used to create an object of the given type in the memory.</P
+><P
+>When reading in an object from the object store, the type 
+      name is looked up in the list of all registered factories and the 
+      factory is called to create the actual instance.
+      <PRE
+CLASS="PROGRAMLISTING"
+>   function Factory return Persistent.Reference is
+      Result : Reference := new Object;
+   begin
+      Handle( Result ).Data := new Object_Data_Type;
+      return Result;
+   end;
+      </PRE
+>      
+      Important to note is that the new operation is used together with
+      the Reference type. This forces the object to be allocated in the 
+      storage_pool of the object management.
+      </P
+><P
+>In addition to the registration of the Factory for the class,
+      the attributes have to be declared for the object implementation.
+      </P
+><P
+>Attribute names are used to map fields of an Ada 95 object between
+      data entries in the storage. As a consequence fields may be added
+      to the object during development of the application and the object 
+      stay still loadable.</P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="loading.gif"><DIV
+CLASS="CAPTION"
+><P
+>The sequence of calls when loading an object from the object</P
+></DIV
+></P
+></DIV
+><P
+>Object are loaded from the storage by means of the Deserialize
+      proceudure. This is an abstract procedure which has to be provided by
+      the implementation:
+
+      <PRE
+CLASS="PROGRAMLISTING"
+>   procedure Deserialize(
+      Item   : in out Object;
+      Header : in Storage_Header.Handle;
+      S      : in Stream_Access );
+      </PRE
+>
+      The purpose of this function is to read in the object attributes from
+      the given stream. The  storage_header contains the fields and the offset
+      of the attributes within the memory stream.
+      <PRE
+CLASS="PROGRAMLISTING"
+>&#13;   procedure Deserialize(
+      Item   : in out Object;
+      Header : in Storage_Header.Handle;
+      S      : in Stream_IO.Stream_Access ) is
+      Field  : String_Array.Handle := Attributes( Header.all );
+   begin
+      for i in Field'Range loop
+         declare
+           ID     : Natural;
+           Offset : Natural;
+           Name   : constant String := To_String( Field(i) );
+         begin
+            ID := Classes.Attribute( Object'Tag, Name );
+            if ID /= 0 then
+               Offset := Storage_Header.Lookup_Attribute( Header.all, Name );
+               Read_Offset( S, Offset );
+
+               case ID is
+                  when D_Name  =&#62;
+                     Item.Name := Unbounded_String'Input(S);
+
+                  when D_Street =&#62;
+                     Item.Street := Unbounded_String'Input(S);
+
+		   ............
+
+                  when Others =&#62;
+                     null;
+               end case;
+            end if;
+         exception
+            when Storage_Header.Unknown_Attribute =&#62;
+               null;
+         end;
+      end loop;
+
+      String_Array.Free( Field );
+   end Deserialize; 
+      </PRE
+>
+      This procedure reads in all attributes which have been listed in the 
+      object header. For each field in the header registered field id  and the 
+      offset in the object storage is looked up. The read pointer is set to 
+      the found offset and the data type is read in. If a attribute name is 
+      not known in the class the field will be ignored.
+      </P
+><P
+>      During startup of the application the package will register the attribute
+      names and the corresponding id by the following code fragment:
+      <PRE
+CLASS="PROGRAMLISTING"
+>          
+   Class_Id := Classes.Register_Factory( Object'Tag, Factory'Access );
+
+   Classes.Attribute( Class_Id, "D_Name",  D_Name  );
+   Classes.Attribute( Class_Id, "D_Used",  D_Used  );
+   Classes.Attribute( Class_Id, "D_Pairs", D_Pairs );
+
+      </PRE
+>
+      </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN150"
+></A
+>Storing Objects</H2
+><P
+>When an application decides to terminate it self, the application
+      may decide to store all persistent objects into a persistent storage 
+      media by calling the procedure Save.</P
+><P
+>When calling the procedure Save (e.g. from the component 
+      ODB.Storage.File), all named objects are stored on a permanent storage 
+      media. This is  done by running through a table which contains all 
+      persistent information.</P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="saving.gif"><DIV
+CLASS="CAPTION"
+><P
+>The sequence of calls when saving a object to the object
+	 storage.</P
+></DIV
+></P
+></DIV
+><P
+>Objects are written by means of the Serialize procedure into 
+      a temporary work space, from where the complete object written out
+      into a storage media.
+      <PRE
+CLASS="PROGRAMLISTING"
+>   procedure Serialize(
+      Item   : in out Object; 
+      Header : in Storage_Header.Handle;
+      S      : in Stream_Access ) is abstract;
+      </PRE
+>
+      The purpose of this procedure is to write the contents of the attributes
+      into the object storage and the storing the offset of each attribute 
+      in the storage header information of the object.
+      <PRE
+CLASS="PROGRAMLISTING"
+>  procedure Serialize(
+      Item   : in out Object;
+      Header : in Storage_Header.Handle;
+      S      : in Stream_IO.Stream_Access ) is
+   begin
+      Register_Attribute( Header.all, D_Street, Write_Offset( S ), Object'Tag );
+      Unbounded_String'Output( S, Item.Street );
+
+      Register_Attribute( Header.all, D_Name, Write_Offset( S ), Object'Tag );
+      Unbounded_String'Output( S, Item.Name );
+
+      .......
+   end Serialize;
+
+      </PRE
+>     
+      In order to simplify the development, the odl translator generates 
+      automatically such procedures.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN166"
+></A
+>Reading/Writing Objects</H2
+><P
+>As already mentioned previously the implementation of the 
+	 read and write procedures have to be symetric, which means what has
+	 been written by the Searialize procedure has to to be readable by the 
+	 Deserialize procedures. Besides of this fact, there are some basic 
+	 rules to be followed:
+
+         <P
+></P
+><UL
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>References to other objects can only be stored
+	    as references to objects. ODB.Persistent provide a Read/Write method
+	    for this type and will resolve the references to other objects
+	    in the object store automatically.</P
+></LI
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>Dynamic data structures have to be resolved by 
+	    the object implementation, e.g. as in the previous example the 
+	    array of pairs R.Pairs.</P
+></LI
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>Any access types in the object have to be resolved
+	    by the object implementation (e.g. the ODB.Collection. class)</P
+></LI
+><LI
+STYLE="list-style-type: opencircle"
+><P
+>For reading and writing use always the operations
+	    Input/Output.</P
+></LI
+></UL
+>
+	 </P
+><P
+>Since the ODL translator is available under normal circumstance
+	 the implementation of the read/write procedure by hand is not nessescary
+	 since the ODL translator creates the code is self.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="basics.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x179.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB Basics</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="basics.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB API</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

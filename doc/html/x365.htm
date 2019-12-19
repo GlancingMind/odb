@@ -1,0 +1,415 @@
+<HTML
+><HEAD
+><TITLE
+>API Reference</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="User's Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE=" ODB.Classes"
+HREF="c340.htm"><LINK
+REL="PREVIOUS"
+TITLE=" ODB.Classes"
+HREF="c340.htm"><LINK
+REL="NEXT"
+TITLE="ODB.Database"
+HREF="c434.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>User's Guide: A Framework for Object Persistency for GNAT; Version 0.6.1; Document Revision $Revision: 1.16 $</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c340.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 9. ODB.Classes</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c434.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN365"
+></A
+>API Reference</H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN367"
+></A
+>type Factory_Access is access function return Reference</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   type Factory_Access is access function return Reference ;  
+ 
+   Invalid_Attribute_ID : exception; 
+ </PRE
+><P
+> this pointer referes to the Factory function belonging to a certain 
+ class. </P
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN372"
+></A
+>function Register_Factory</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Register_Factory(  
+      Name    : in Tag; 
+      Creator : in Factory_Access ) return Natural; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN375"
+></A
+>Description</H4
+><P
+>    Register the factory with the given class name. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN377"
+></A
+>Preconditions</H4
+><P
+>    - Class is not yet registered </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN379"
+></A
+>Postconditions</H4
+><P
+>    - Factory will return a valid value </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN381"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN383"
+></A
+>function Factory</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Factory(  
+      Name : in Tag ) return Factory_Access; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN386"
+></A
+>Description</H4
+><P
+>    Find the factory and return the pointer to the factory function. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN388"
+></A
+>Preconditions</H4
+><P
+>    - Factory has been registered for the given given persistent class </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN390"
+></A
+>Postconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN393"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN395"
+></A
+>function Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Attribute(  
+      This   : in Tag; 
+      Id     : in Natural ) return String ; 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN398"
+></A
+>Description</H4
+><P
+>    Returns the attribute name for a given attribute id. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN400"
+></A
+>Preconditions</H4
+><P
+>    - Function returns attribute name </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN402"
+></A
+>Postconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN405"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN407"
+></A
+>procedure Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   procedure Attribute(  
+      This : in Natural; 
+      Name : in String; 
+      Id   : in Natural ); 
+ </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN410"
+></A
+>Description</H4
+><P
+>    Associate an attribute name and a id with the class id as it 
+    has been returned by Register_Factory. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN413"
+></A
+>Preconditions</H4
+><P
+>    - Factory has been registered for the given given persistent class 
+    - Attrbiute has not been defined before. </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN416"
+></A
+>Postconditions</H4
+><P
+>    None </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN419"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN421"
+></A
+>function Attribute</H2
+><PRE
+CLASS="PROGRAMLISTING"
+>   function Attribute(  
+      This   : in Tag; 
+      Name   : in String ) return Natural; 
+ 
+end ODB.Classes; </PRE
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN424"
+></A
+>Description</H4
+><P
+>    Translate a attribute name into a attribute id. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN426"
+></A
+>Preconditions</H4
+><P
+>    - Package class has been registered </P
+><P
+></P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN429"
+></A
+>Postconditions</H4
+><P
+>    - Return 0 if not found </P
+><P
+>    - Returns id if the attribute has been associated with Attute. </P
+><H4
+CLASS="BRIDGEHEAD"
+><A
+NAME="AEN432"
+></A
+>Exceptions</H4
+><P
+>    None </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c340.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c434.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ODB.Classes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c340.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ODB.Database</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
